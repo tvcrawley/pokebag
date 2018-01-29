@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Pokébag",
+  "name": "Application to store and modify pokémon and items in a bag",
   "icons": [
     {
       "src": "favicon.ico",
