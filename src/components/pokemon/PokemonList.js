@@ -5,7 +5,7 @@ class PokemonList extends Component {
   render() {
     const pokemonList = this.props.pokemon.map((data, index) =>
       <li key={index}>
-        <span>{data.name}</span>
+        <span onClick={() => this.props.onPokemonClick(index)}>{data.name}</span>
       </li>
     )
     return (

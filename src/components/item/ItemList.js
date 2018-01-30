@@ -5,7 +5,7 @@ class ItemList extends Component {
   render() {
     const itemList = this.props.items.map((data, index) =>
       <li key={index}>
-        <span>{data.name}</span>
+        <span onClick={() => this.props.onItemClick(index)}>{data.name}</span>
       </li>
     )
     return (
