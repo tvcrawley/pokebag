@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './Body.css';
 import Backpack from '../backpack/Backpack';
 
 class Body extends Component {

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './Backpack.css';
 import PokemonList from '../pokemon/PokemonList';
 import ItemList from '../item/ItemList';
 
