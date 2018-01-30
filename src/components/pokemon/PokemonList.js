@@ -3,9 +3,15 @@ import './PokemonList.css';
 
 class PokemonList extends Component {
   render() {
+    const pokemonList = this.props.pokemon.map((data, index) =>
+      <li key={index}>
+        <span onClick={() => this.props.onPokemonClick(index)}>{data.name}</span>
+      </li>
+    )
     return (
       <div className="PokemonList">
-        PokemonList
+        <h2>PokemonList</h2>
+        {pokemonList}
       </div>
     );
   }
