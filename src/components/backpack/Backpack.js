@@ -13,17 +13,7 @@ class Backpack extends Component {
       backpack: [],
       // pokemon array = pokemon_entries from https://pokeapi.co/api/v2/pokedex/2/
       pokemon: [],
-      items: [
-        {
-          name: 'Charmander Candy'
-        },
-        {
-          name: 'Squirtle Candy'
-        },
-        {
-          name: 'Bulbasaur Candy'
-        }
-      ]
+      items: []
     }
     this.handlePokemonClick = this.handlePokemonClick.bind(this)
     this.handleItemClick = this.handleItemClick.bind(this)
@@ -40,6 +30,23 @@ class Backpack extends Component {
           this.setState({
             isLoaded: true,
             pokemon: result.data.pokemon_entries
+          })
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          })
+        }
+      )
+    axios.get("https://pokeapi.co/api/v2/item/?limit=200")
+      .then(
+        (result) => {
+          console.log(result)
+          // console.log('Sun Stone?: ', result.data.results[79].name)
+          this.setState({
+            isLoaded: true,
+            items: result.data.results
           })
         },
         (error) => {

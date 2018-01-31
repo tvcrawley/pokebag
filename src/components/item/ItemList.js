@@ -11,7 +11,13 @@ class ItemList extends Component {
     return (
       <div className="ItemList">
         <h2>ItemList</h2>
-        {itemList}
+        <ul>
+          {this.props.items.map((item, index) => (
+            <li key={item.name}>
+              <span onClick={() => this.props.onItemClick(index)}>{item.name}</span>
+            </li>
+          ))}
+        </ul>
       </div>
     );
   }
