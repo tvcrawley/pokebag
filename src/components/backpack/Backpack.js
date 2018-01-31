@@ -37,6 +37,7 @@ class Backpack extends Component {
     this.handlePokemonClick = this.handlePokemonClick.bind(this)
     this.handleItemClick = this.handleItemClick.bind(this)
     this.handleDeleteFromBackpack = this.handleDeleteFromBackpack.bind(this)
+    this.handleBackpackDetailClick = this.handleBackpackDetailClick.bind(this)
   }
 
   handlePokemonClick(index){
@@ -68,11 +69,29 @@ handleDeleteFromBackpack(index) {
   console.log(this.state.backpack)
 }
 
+handleBackpackDetailClick(index) {
+  const backpackCopy = this.state.backpack.slice()
+  backpackCopy[index] = Object.assign({}, backpackCopy[index])
+  backpackCopy[index].showDetails = !backpackCopy[index].showDetails
+  console.log(backpackCopy[index].showDetails)
+  this.setState({backpack: backpackCopy})
+}
+
   render() {
+    const details = ((data) => {
+      if(!data.showDetails) {
+        return null
+      }
+      else {
+        return <p>Type: {data.type}</p>
+      }
+    })
+
     const backpackList = this.state.backpack.map((data, index) =>
       <li key={index}>
-        <span>{data.name}</span>
+        <span  onClick={() => this.handleBackpackDetailClick(index)}>{data.name}</span>
         <span onClick={() => this.handleDeleteFromBackpack(index)}>X</span>
+        {details(data)}
       </li>
     )
     return (
