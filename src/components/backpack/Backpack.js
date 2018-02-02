@@ -26,6 +26,10 @@ class Backpack extends Component {
   }
 
   componentDidMount() {
+    pokemonData.pokemon_entries.forEach((pokemon) => {
+      pokemon.pokemon_species.level = 1
+      pokemon.pokemon_species.experience = 0
+    })
     // console.log(pokemonData)
     // console.log(itemsData)
     this.setState({
@@ -114,7 +118,10 @@ class Backpack extends Component {
       if(!data.showDetails) {
         return null
       } else {
-        return <p>Type: {data.type}</p>
+        return <div>
+          <p>Experience: {data.pokemon_species.experience}</p>
+          <p>Level: {data.pokemon_species.level}</p>
+        </div>
       }
     })
 
