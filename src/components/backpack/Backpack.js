@@ -117,6 +117,16 @@ class Backpack extends Component {
   handleAddExperienceClick(index) {
     const backpackCopy = this.state.backpack.slice()
     backpackCopy[index].pokemon_species.experience += 5
+
+    mediumSlow.levels.map((levelInfo) => {
+      if(backpackCopy[index].pokemon_species.level === levelInfo.level) {
+        if(backpackCopy[index].pokemon_species.experience > levelInfo.experience) {
+          backpackCopy[index].pokemon_species.level++
+          console.log(backpackCopy[index])
+        }
+      }
+    })
+
     this.setState({backpack: backpackCopy})
   }
 
