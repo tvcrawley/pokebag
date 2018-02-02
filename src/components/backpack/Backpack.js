@@ -3,6 +3,10 @@ import './Backpack.css';
 import axios from 'axios';
 import PokemonList from '../pokemon/PokemonList';
 import ItemList from '../item/ItemList';
+import pokemonData from '../../data/pokemonData.json';
+import itemsData from '../../data/itemsData.json';
+import mediumSlow from '../../data/growth-rate/mediumSlow.json';
+
 
 class Backpack extends Component {
   constructor(props) {
@@ -22,41 +26,51 @@ class Backpack extends Component {
   }
 
   componentDidMount() {
-    axios.get("https://www.pokeapi.co/api/v2/pokedex/2/")
-      .then(
-        (result) => {
-          console.log(result)
-          // console.log('Charmander?: ', result.data.pokemon_entries[3].pokemon_species.name)
-          this.setState({
-            isLoaded: true,
-            pokemon: result.data.pokemon_entries
-          })
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error
-          })
-        }
-      )
-    axios.get("https://pokeapi.co/api/v2/item/?limit=200")
-      .then(
-        (result) => {
-          console.log(result)
-          // console.log('Sun Stone?: ', result.data.results[79].name)
-          this.setState({
-            isLoaded: true,
-            items: result.data.results
-          })
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error
-          })
-        }
-      )
+    // console.log(pokemonData)
+    // console.log(itemsData)
+    this.setState({
+      isLoaded: true,
+      pokemon: pokemonData.pokemon_entries,
+      items: itemsData.results
+    })
   }
+
+  // componentDidMount() {
+  //   axios.get("https://www.pokeapi.co/api/v2/pokedex/2/")
+  //     .then(
+  //       (result) => {
+  //         console.log(result)
+  //         // console.log('Charmander?: ', result.data.pokemon_entries[3].pokemon_species.name)
+  //         this.setState({
+  //           isLoaded: true,
+  //           pokemon: result.data.pokemon_entries
+  //         })
+  //       },
+  //       (error) => {
+  //         this.setState({
+  //           isLoaded: true,
+  //           error
+  //         })
+  //       }
+  //     )
+  //   axios.get("https://pokeapi.co/api/v2/item/?limit=200")
+  //     .then(
+  //       (result) => {
+  //         console.log(result)
+  //         // console.log('Sun Stone?: ', result.data.results[79].name)
+  //         this.setState({
+  //           isLoaded: true,
+  //           items: result.data.results
+  //         })
+  //       },
+  //       (error) => {
+  //         this.setState({
+  //           isLoaded: true,
+  //           error
+  //         })
+  //       }
+  //     )
+  // }
 
   handlePokemonClick(index){
     console.log('pokemon added')
