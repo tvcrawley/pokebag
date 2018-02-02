@@ -23,6 +23,7 @@ class Backpack extends Component {
     this.handleItemClick = this.handleItemClick.bind(this)
     this.handleDeleteFromBackpack = this.handleDeleteFromBackpack.bind(this)
     this.handleBackpackDetailClick = this.handleBackpackDetailClick.bind(this)
+    this.handleAddExperienceClick = this.handleAddExperienceClick.bind(this)
   }
 
   componentDidMount() {
@@ -113,13 +114,22 @@ class Backpack extends Component {
     this.setState({backpack: backpackCopy})
   }
 
+  handleAddExperienceClick(index) {
+    const backpackCopy = this.state.backpack.slice()
+    backpackCopy[index].pokemon_species.experience += 5
+    this.setState({backpack: backpackCopy})
+  }
+
   render() {
-    const details = ((data) => {
+    const details = ((data, index) => {
       if(!data.showDetails) {
         return null
       } else {
         return <div>
-          <p>Experience: {data.pokemon_species.experience}</p>
+          <p>
+            Experience: {data.pokemon_species.experience}
+            <span onClick={() => this.handleAddExperienceClick(index)}>+</span>
+          </p>
           <p>Level: {data.pokemon_species.level}</p>
         </div>
       }
@@ -129,7 +139,7 @@ class Backpack extends Component {
       <li key={index}>
         <span onClick={() => this.handleBackpackDetailClick(index)}>{data.pokemon_species.name}</span>
         <span onClick={() => this.handleDeleteFromBackpack(index)}>X</span>
-        {details(data)}
+        {details(data, index)}
       </li>
     )
 
