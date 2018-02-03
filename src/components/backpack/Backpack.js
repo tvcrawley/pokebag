@@ -12,6 +12,8 @@ import moonStone from '../../data/itemDetails/moonStone.json';
 import fireStone from '../../data/itemDetails/fireStone.json';
 import waterStone from '../../data/itemDetails/waterStone.json';
 import leafStone from '../../data/itemDetails/leafStone.json';
+import pikachu from '../../data/evolution/pikachu.json';
+import poliwag from '../../data/evolution/poliwag.json';
 
 
 class Backpack extends Component {
@@ -162,6 +164,29 @@ class Backpack extends Component {
     this.setState({backpack: backpackCopy})
   }
 
+  handleUseItemClick (index) {
+    const backpackCopy = this.state.backpack
+    backpackCopy.forEach((content) => {
+
+      if(content.pokemon_species != undefined) {
+
+        if (backpackCopy[index].effect.includes(content.pokemon_species.name)) {
+
+          console.log(content);
+
+          let apiData = poliwag.chain
+          console.log(apiData);
+          while(content.pokemon_species.name != apiData.species.name) {
+            apiData = apiData.evolves_to[0]
+            console.log(apiData);
+          }
+           console.log('apiData: ', apiData.species.name);
+        }
+      }
+    })
+    this.setState({backpack: backpackCopy})
+  }
+
   render() {
     const details = ((data, index) => {
       if(!data.showDetails) {
@@ -196,6 +221,7 @@ class Backpack extends Component {
     } else {
       return (<li key={index}>
         <span onClick={() => this.handleBackpackDetailClick(index)}>{data.name}</span>
+        <span onClick={() => this.handleUseItemClick(index)}>Use</span>
         <span onClick={() => this.handleDeleteFromBackpack(index)}>X</span>
         {details(data, index)}
       </li> )
