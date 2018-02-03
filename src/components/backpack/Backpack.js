@@ -6,6 +6,12 @@ import ItemList from '../item/ItemList';
 import pokemonData from '../../data/pokemonData.json';
 import itemsData from '../../data/itemsData.json';
 import mediumSlow from '../../data/growth-rate/mediumSlow.json';
+import sunStone from '../../data/itemDetails/sunStone.json';
+import thunderStone from '../../data/itemDetails/thunderStone.json';
+import moonStone from '../../data/itemDetails/moonStone.json';
+import fireStone from '../../data/itemDetails/fireStone.json';
+import waterStone from '../../data/itemDetails/waterStone.json';
+import leafStone from '../../data/itemDetails/leafStone.json';
 
 
 class Backpack extends Component {
@@ -30,6 +36,32 @@ class Backpack extends Component {
     pokemonData.pokemon_entries.forEach((pokemon) => {
       pokemon.pokemon_species.level = 1
       pokemon.pokemon_species.experience = 0
+    })
+    itemsData.results.forEach((item) => {
+      switch(item.name) {
+        case 'sun-stone':
+          item.effect = sunStone.effect_entries[0].effect
+          break
+        case 'thunder-stone':
+          item.effect = thunderStone.effect_entries[0].effect
+          break
+        case 'moon-stone':
+          item.effect = moonStone.effect_entries[0].effect
+          break
+        case 'fire-stone':
+          item.effect = fireStone.effect_entries[0].effect
+          break
+        case 'water-stone':
+          item.effect = waterStone.effect_entries[0].effect
+          break
+        case 'leaf-stone':
+          item.effect = leafStone.effect_entries[0].effect
+          break
+        default:
+          console.log(item)
+          break
+      }
+
     })
     // console.log(pokemonData)
     // console.log(itemsData)
@@ -135,23 +167,40 @@ class Backpack extends Component {
       if(!data.showDetails) {
         return null
       } else {
-        return <div>
-          <p>
-            Experience: {data.pokemon_species.experience}
-            <span onClick={() => this.handleAddExperienceClick(index)}>+</span>
-          </p>
-          <p>Level: {data.pokemon_species.level}</p>
-        </div>
+        if (data.pokemon_species != undefined) {
+          return <div>
+            <p>
+              Experience: {data.pokemon_species.experience}
+              <span onClick={() => this.handleAddExperienceClick(index)}>+</span>
+            </p>
+            <p>Level: {data.pokemon_species.level}</p>
+          </div>
+        } else {
+          return <div>
+            <p>
+              Effect: {data.effect}
+            </p>
+          </div>
+        }
+
       }
     })
 
-    const backpackList = this.state.backpack.map((data, index) =>
-      <li key={index}>
+    const backpackList = this.state.backpack.map((data, index) => {
+    if (data.pokemon_species != undefined) {
+      return (<li key={index}>
         <span onClick={() => this.handleBackpackDetailClick(index)}>{data.pokemon_species.name}</span>
         <span onClick={() => this.handleDeleteFromBackpack(index)}>X</span>
         {details(data, index)}
-      </li>
-    )
+      </li>)
+    } else {
+      return (<li key={index}>
+        <span onClick={() => this.handleBackpackDetailClick(index)}>{data.name}</span>
+        <span onClick={() => this.handleDeleteFromBackpack(index)}>X</span>
+        {details(data, index)}
+      </li> )
+    }
+  })
 
     const { error, isLoaded, pokemon} = this.state
       if(error) {
