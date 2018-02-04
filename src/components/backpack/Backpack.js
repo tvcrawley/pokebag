@@ -113,8 +113,25 @@ class Backpack extends Component {
 
   handlePokemonClick(index){
     console.log('pokemon added')
+
+    // creates a deep copy of an array
+    const copy = (obj) => {
+      let output
+      let value
+      let key
+
+      output = Array.isArray(obj) ? [] : {}
+      for(key in obj) {
+        value = obj[key]
+        output[key] = (typeof value === "object") ? copy(value) : value
+      }
+      return output
+    }
+
     const backpackCopy = this.state.backpack.slice()
-    backpackCopy.push(this.state.pokemon[index])
+    const pokemonCopy = copy(this.state.pokemon)
+
+    backpackCopy.push(pokemonCopy[index])
     this.setState({
       backpack: backpackCopy
     })
@@ -150,6 +167,10 @@ class Backpack extends Component {
 
   handleAddExperienceClick(index) {
     const backpackCopy = this.state.backpack.slice()
+    console.log('index: ', index);
+    console.log('backpackCopy: ', backpackCopy);
+    console.log('backpackCopy[index]:', backpackCopy[index]);
+    console.log(backpackCopy[index].pokemon_species.experience);
     backpackCopy[index].pokemon_species.experience += 5
 
     mediumSlow.levels.map((levelInfo) => {
@@ -167,7 +188,6 @@ class Backpack extends Component {
   handleUseItemClick (index) {
     const backpackCopy = this.state.backpack
     backpackCopy.forEach((content) => {
-
       if(content.pokemon_species != undefined) {
 
         if (backpackCopy[index].effect.includes(content.pokemon_species.name)) {
