@@ -47,7 +47,7 @@ class Backpack extends Component {
       })
       pokemon.pokemon_species.description = flavorTextObj.flavor_text
       pokemon.pokemon_species.growth_rate = mediumSlow.levels
-      console.log('growth rate: ', pokemon.pokemon_species.growth_rate);
+      pokemon.pokemon_species.evolution_chain = pikachu.chain
     })
     itemsData.results.forEach((item) => {
       switch(item.name) {
@@ -177,7 +177,7 @@ class Backpack extends Component {
 
   handleAddExperienceClick(index) {
     const backpackCopy = this.state.backpack.slice()
-    backpackCopy[index].pokemon_species.experience += 5
+    backpackCopy[index].pokemon_species.experience += 20
 
     backpackCopy[index].pokemon_species.growth_rate.map((levelInfo) => {
       if(backpackCopy[index].pokemon_species.level === levelInfo.level) {
@@ -188,11 +188,11 @@ class Backpack extends Component {
       }
     })
 
-    let apiData = charmander.chain
-    while(backpackCopy[index].pokemon_species.name != apiData.species.name) {
-      apiData = apiData.evolves_to[0]
+    let evolutionChain = backpackCopy[index].pokemon_species.evolution_chain
+    while(backpackCopy[index].pokemon_species.name != evolutionChain.species.name) {
+      evolutionChain = evolutionChain.evolves_to[0]
     }
-    if(backpackCopy[index].pokemon_species.level === apiData.evolves_to[0].evolution_details[0].min_level) {
+    if(backpackCopy[index].pokemon_species.level === evolutionChain.evolves_to[0].evolution_details[0].min_level) {
 
         // creates a deep copy of an array
         const copy = (obj) => {
@@ -209,7 +209,7 @@ class Backpack extends Component {
         }
 
         const pokemonCopy = copy(this.state.pokemon)
-        if(pokemonCopy[backpackCopy[index].entry_number - 1].pokemon_species.name === apiData.species.name) {
+        if(pokemonCopy[backpackCopy[index].entry_number - 1].pokemon_species.name === evolutionChain.species.name) {
 
           pokemonCopy[backpackCopy[index].entry_number].pokemon_species.experience = backpackCopy[index].pokemon_species.experience
           pokemonCopy[backpackCopy[index].entry_number].pokemon_species.level = backpackCopy[index].pokemon_species.level
@@ -228,9 +228,9 @@ class Backpack extends Component {
       if(content.pokemon_species != undefined) {
 
         if (backpackCopy[index].effect.includes(content.pokemon_species.name)) {
-          let apiData = pikachu.chain
-          while(content.pokemon_species.name != apiData.species.name) {
-            apiData = apiData.evolves_to[0]
+          let evolutionChain = backpackCopy[contentIndex].pokemon_species.evolution_chain
+          while(content.pokemon_species.name != evolutionChain.species.name) {
+            evolutionChain = evolutionChain.evolves_to[0]
           }
 
            // creates a deep copy of an array
