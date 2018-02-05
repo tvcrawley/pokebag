@@ -187,21 +187,39 @@ class Backpack extends Component {
 
   handleUseItemClick (index) {
     const backpackCopy = this.state.backpack
-    backpackCopy.forEach((content) => {
+    backpackCopy.forEach((content, contentIndex) => {
       if(content.pokemon_species != undefined) {
 
         if (backpackCopy[index].effect.includes(content.pokemon_species.name)) {
-
-          console.log(content);
-
-          let apiData = poliwag.chain
-          console.log(apiData);
+          let apiData = pikachu.chain
           while(content.pokemon_species.name != apiData.species.name) {
             apiData = apiData.evolves_to[0]
-            console.log(apiData);
           }
-           console.log('apiData: ', apiData.species.name);
-        }
+
+           // creates a deep copy of an array
+           const copy = (obj) => {
+             let output
+             let value
+             let key
+
+             output = Array.isArray(obj) ? [] : {}
+             for(key in obj) {
+               value = obj[key]
+               output[key] = (typeof value === "object") ? copy(value) : value
+             }
+             return output
+           }
+
+           const pokemonCopy = copy(this.state.pokemon)
+           if(backpackCopy[index].effect.includes(pokemonCopy[content.entry_number].pokemon_species.name)) {
+
+             pokemonCopy[content.entry_number].pokemon_species.experience = content.pokemon_species.experience
+             pokemonCopy[content.entry_number].pokemon_species.level = content.pokemon_species.level
+
+             backpackCopy.splice(contentIndex, 1, pokemonCopy[content.entry_number])
+             backpackCopy.splice(contentIndex + 1, 1)
+           }
+         }
       }
     })
     this.setState({backpack: backpackCopy})
