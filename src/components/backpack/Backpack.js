@@ -38,17 +38,17 @@ class Backpack extends Component {
   }
 
   componentDidMount() {
-    pokemonData.pokemon_entries.forEach((pokemon) => {
-      pokemon.pokemon_species.level = 1
-      pokemon.pokemon_species.experience = 0
-      // make a GET request for individual pokemon data from pokemon_species url
-      const flavorTextObj = poliwhirlData.flavor_text_entries.find((element) => {
-        return element.version.name === ("red" || "yellow" || "blue")
-      })
-      pokemon.pokemon_species.description = flavorTextObj.flavor_text
-      pokemon.pokemon_species.growth_rate = mediumSlow.levels
-      pokemon.pokemon_species.evolution_chain = pikachu.chain
-    })
+    // pokemonData.pokemon_entries.forEach((pokemon) => {
+    //   pokemon.pokemon_species.level = 1
+    //   pokemon.pokemon_species.experience = 0
+    //   // make a GET request for individual pokemon data from pokemon_species url
+    //   const flavorTextObj = poliwhirlData.flavor_text_entries.find((element) => {
+    //     return element.version.name === ("red" || "yellow" || "blue")
+    //   })
+    //   pokemon.pokemon_species.description = flavorTextObj.flavor_text
+    //   pokemon.pokemon_species.growth_rate = mediumSlow.levels
+    //   pokemon.pokemon_species.evolution_chain = pikachu.chain
+    // })
     itemsData.results.forEach((item) => {
       switch(item.name) {
         case 'sun-stone':
@@ -79,29 +79,39 @@ class Backpack extends Component {
     // console.log(itemsData)
     this.setState({
       isLoaded: true,
-      pokemon: pokemonData.pokemon_entries,
+      // pokemon: pokemonData.pokemon_entries,
       items: itemsData.results
     })
   }
 
-  // componentDidMount() {
-  //   axios.get("https://www.pokeapi.co/api/v2/pokedex/2/")
-  //     .then(
-  //       (result) => {
-  //         console.log(result)
-  //         // console.log('Charmander?: ', result.data.pokemon_entries[3].pokemon_species.name)
-  //         this.setState({
-  //           isLoaded: true,
-  //           pokemon: result.data.pokemon_entries
-  //         })
-  //       },
-  //       (error) => {
-  //         this.setState({
-  //           isLoaded: true,
-  //           error
-  //         })
-  //       }
-  //     )
+  componentDidMount() {
+    axios.get("https://www.pokeapi.co/api/v2/pokedex/2/")
+      .then(
+        (result) => {
+          console.log(result)
+          result.data.pokemon_entries.forEach((pokemon) => {
+            pokemon.pokemon_species.level = 1
+            pokemon.pokemon_species.experience = 0
+            // make a GET request for individual pokemon data from pokemon_species url
+            const flavorTextObj = poliwhirlData.flavor_text_entries.find((element) => {
+              return element.version.name === ("red" || "yellow" || "blue")
+            })
+            pokemon.pokemon_species.description = flavorTextObj.flavor_text
+            pokemon.pokemon_species.growth_rate = mediumSlow.levels
+            pokemon.pokemon_species.evolution_chain = charmander.chain
+          })
+          this.setState({
+            isLoaded: true,
+            pokemon: result.data.pokemon_entries
+          })
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          })
+        }
+      )
   //   axios.get("https://pokeapi.co/api/v2/item/?limit=200")
   //     .then(
   //       (result) => {
@@ -119,7 +129,7 @@ class Backpack extends Component {
   //         })
   //       }
   //     )
-  // }
+  }
 
   handlePokemonClick(index){
     console.log('pokemon added')
