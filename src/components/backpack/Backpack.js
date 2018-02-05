@@ -15,6 +15,8 @@ import leafStone from '../../data/itemDetails/leafStone.json';
 import pikachu from '../../data/evolution/pikachu.json';
 import poliwag from '../../data/evolution/poliwag.json';
 import charmander from '../../data/evolution/charmander.json';
+import charmanderData from '../../data/pokemon/charmander.json';
+import poliwhirlData from '../../data/pokemon/poliwhirl.json';
 
 
 class Backpack extends Component {
@@ -39,6 +41,11 @@ class Backpack extends Component {
     pokemonData.pokemon_entries.forEach((pokemon) => {
       pokemon.pokemon_species.level = 1
       pokemon.pokemon_species.experience = 0
+      // make a GET request for individual pokemon data from pokemon_species url
+      const flavorTextObj = poliwhirlData.flavor_text_entries.find((element) => {
+        return element.version.name === ("red" || "yellow" || "blue")
+      })
+      pokemon.pokemon_species.description = flavorTextObj.flavor_text
     })
     itemsData.results.forEach((item) => {
       switch(item.name) {
@@ -61,7 +68,7 @@ class Backpack extends Component {
           item.effect = leafStone.effect_entries[0].effect
           break
         default:
-          console.log(item)
+          // console.log(item)
           break
       }
 
@@ -265,6 +272,7 @@ class Backpack extends Component {
               <span onClick={() => this.handleAddExperienceClick(index)}>+</span>
             </p>
             <p>Level: {data.pokemon_species.level}</p>
+            <p>Description: {data.pokemon_species.description}</p>
           </div>
         } else {
           return <div>
