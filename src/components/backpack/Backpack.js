@@ -46,6 +46,8 @@ class Backpack extends Component {
         return element.version.name === ("red" || "yellow" || "blue")
       })
       pokemon.pokemon_species.description = flavorTextObj.flavor_text
+      pokemon.pokemon_species.growth_rate = mediumSlow.levels
+      console.log('growth rate: ', pokemon.pokemon_species.growth_rate);
     })
     itemsData.results.forEach((item) => {
       switch(item.name) {
@@ -177,7 +179,7 @@ class Backpack extends Component {
     const backpackCopy = this.state.backpack.slice()
     backpackCopy[index].pokemon_species.experience += 5
 
-    mediumSlow.levels.map((levelInfo) => {
+    backpackCopy[index].pokemon_species.growth_rate.map((levelInfo) => {
       if(backpackCopy[index].pokemon_species.level === levelInfo.level) {
         if(backpackCopy[index].pokemon_species.experience >= levelInfo.experience) {
           backpackCopy[index].pokemon_species.level++
