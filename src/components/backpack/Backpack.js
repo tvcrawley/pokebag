@@ -14,6 +14,7 @@ import waterStone from '../../data/itemDetails/waterStone.json';
 import leafStone from '../../data/itemDetails/leafStone.json';
 import pikachu from '../../data/evolution/pikachu.json';
 import poliwag from '../../data/evolution/poliwag.json';
+import charmander from '../../data/evolution/charmander.json';
 
 
 class Backpack extends Component {
@@ -167,20 +168,47 @@ class Backpack extends Component {
 
   handleAddExperienceClick(index) {
     const backpackCopy = this.state.backpack.slice()
-    console.log('index: ', index);
-    console.log('backpackCopy: ', backpackCopy);
-    console.log('backpackCopy[index]:', backpackCopy[index]);
-    console.log(backpackCopy[index].pokemon_species.experience);
     backpackCopy[index].pokemon_species.experience += 5
 
     mediumSlow.levels.map((levelInfo) => {
       if(backpackCopy[index].pokemon_species.level === levelInfo.level) {
-        if(backpackCopy[index].pokemon_species.experience > levelInfo.experience) {
+        if(backpackCopy[index].pokemon_species.experience >= levelInfo.experience) {
           backpackCopy[index].pokemon_species.level++
           console.log(backpackCopy[index])
         }
       }
     })
+
+    let apiData = charmander.chain
+    while(backpackCopy[index].pokemon_species.name != apiData.species.name) {
+      apiData = apiData.evolves_to[0]
+    }
+    if(backpackCopy[index].pokemon_species.level === apiData.evolves_to[0].evolution_details[0].min_level) {
+
+        // creates a deep copy of an array
+        const copy = (obj) => {
+          let output
+          let value
+          let key
+
+          output = Array.isArray(obj) ? [] : {}
+          for(key in obj) {
+            value = obj[key]
+            output[key] = (typeof value === "object") ? copy(value) : value
+          }
+          return output
+        }
+
+        const pokemonCopy = copy(this.state.pokemon)
+        if(pokemonCopy[backpackCopy[index].entry_number - 1].pokemon_species.name === apiData.species.name) {
+
+          pokemonCopy[backpackCopy[index].entry_number].pokemon_species.experience = backpackCopy[index].pokemon_species.experience
+          pokemonCopy[backpackCopy[index].entry_number].pokemon_species.level = backpackCopy[index].pokemon_species.level
+
+          backpackCopy.splice(index, 1, pokemonCopy[backpackCopy[index].entry_number])
+          backpackCopy.splice(index + 1, 1)
+        }
+    }
 
     this.setState({backpack: backpackCopy})
   }
