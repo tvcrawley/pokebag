@@ -2,10 +2,18 @@ import React from 'react';
 import './Backpack.css';
 
 function Backpack (props) {
+
+  // toggle backpack content details
   const details = ((data, index) => {
+    // render nothing if showDetails is false
+    // otherwise render backpack content details
     if(!data.showDetails) {
       return null
     } else {
+      // if the content is a pokemon, render detailed pokemon data and functionality
+      // if the content is an evolution item, render a user warning message and
+      // detailed evolution item data
+      // if the content is not an evolution item, render detailed item data
         if ((data.pokemon_species !== undefined) && (data.pokemon_species.description !== undefined)) {
           return <div>
             <p>
@@ -32,6 +40,10 @@ function Backpack (props) {
     }
   })
 
+  // loop through backpack array
+  // if the content is a pokemon, render pokemon data and functionality
+  // if the content is an evolution item, render evolution item data and functionality
+  // if the content is not an evolution item, render item data and functionality
   const backpackList = props.backpack.map((data, index) => {
     if (data.pokemon_species !== undefined) {
       return (

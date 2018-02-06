@@ -7,6 +7,9 @@ function ItemList(props) {
       <span onClick={() => props.onItemClick(index)}>{data.name}</span>
     </li>
   )
+
+  // loop through items array
+  // render new array with item names and click functionality
   return (
     <div className="ItemList">
       <h2>ItemList</h2>

@@ -41,6 +41,7 @@ class DataContainer extends Component {
   }
 
   // componentDidMount() {
+  //   // sets the state of the pokemon array from the pokeapi
   //   axios.get("https://www.pokeapi.co/api/v2/pokedex/2/")
   //     .then(
   //       (result) => {
@@ -57,6 +58,7 @@ class DataContainer extends Component {
   //         })
   //       }
   //     )
+  //   // sets the state of the items array from the pokeapi
   //   axios.get("https://pokeapi.co/api/v2/item/?limit=200")
   //     .then(
   //       (result) => {
@@ -96,12 +98,16 @@ class DataContainer extends Component {
         return element.version.name === ("red" || "yellow" || "blue")
       })
 
+    // gets pokemon_species info specific for this pokemon from the pokeapi
+    // sets description on pokemon obj
     axios.get(pokemonCopy[index].pokemon_species.url)
       .then((result) => {
         pokemonCopy[index].pokemon_species.description = flavorTextObj(result.data).flavor_text
         return result
       })
       .then((result) => {
+        // gets growth_rate info specific for this pokemon from the pokeapi
+        // sets growth_rate on pokemon obj
         axios.get(result.data.growth_rate.url)
           .then((result) => {
             pokemonCopy[index].pokemon_species.growth_rate = result.data.levels
@@ -109,6 +115,8 @@ class DataContainer extends Component {
           return result
       })
       .then((result) => {
+        // gets evolution_chain info specific for this pokemon from the pokeapi
+        // sets evolution_chain on pokemon obj
         axios.get(result.data.evolution_chain.url)
           .then((result) => {
             pokemonCopy[index].pokemon_species.evolution_chain = result.data.chain
@@ -122,6 +130,8 @@ class DataContainer extends Component {
 
   // builds one item obj
   buildItem(index, itemCopy){
+    // gets effect info specific for this item from the pokeapi
+    // sets effect on item obj
     axios.get(itemCopy[index].url)
       .then((result) => {
         itemCopy[index].effect = result.data.effect_entries[0].effect
@@ -133,9 +143,14 @@ class DataContainer extends Component {
       return itemCopy[index]
   }
 
+  // updates the current pokemon to the appropriate pokemon in the evolution chain
   evolvePokemonByItem(index, contentIndex, contentEntryNumber, backpackCopy, content) {
     const pokemonCopy = this.copy(this.state.pokemon)
 
+    // if the item's effect description contains the current pokemon's name
+    // set evolved pokemon's experience and level to the current pokemon's values
+    // build the rest of the evolved pokemon obj and replace the current pokemon obj
+    // with the evolved pokemon obj
     if(backpackCopy[index].effect.includes(pokemonCopy[contentEntryNumber].pokemon_species.name)) {
       pokemonCopy[contentEntryNumber].pokemon_species.experience = content.pokemon_species.experience
       pokemonCopy[contentEntryNumber].pokemon_species.level = content.pokemon_species.level
@@ -144,6 +159,9 @@ class DataContainer extends Component {
     }
   }
 
+  // add pokemon to backpack array
+  // create deep copy of pokemon array
+  // add custom properties to chosen pokemon (GET requests for additional data included)
   handlePokemonClick(index){
     const backpackCopy = this.state.backpack.slice()
     const pokemonCopy = this.copy(this.state.pokemon)
@@ -156,6 +174,9 @@ class DataContainer extends Component {
     })
   }
 
+  // add item to backpack array
+  // create deep copy of items array
+  // add custom property to chosen item (GET request for additional data included)
   handleItemClick(index){
     const backpackCopy = this.state.backpack.slice()
     const itemCopy = this.copy(this.state.items)
@@ -166,6 +187,7 @@ class DataContainer extends Component {
     })
   }
 
+  // remove content from backpack array
   handleDeleteFromBackpack(index) {
     const backpackCopy = this.state.backpack.slice()
     backpackCopy.splice(index, 1)
@@ -174,6 +196,7 @@ class DataContainer extends Component {
     })
   }
 
+  // toogle backpack array data
   handleBackpackDetailClick(index) {
     const backpackCopy = this.state.backpack.slice()
     backpackCopy[index] = Object.assign({}, backpackCopy[index])
@@ -181,10 +204,13 @@ class DataContainer extends Component {
     this.setState({backpack: backpackCopy})
   }
 
+  // add experience to pokemon in backpack
   handleAddExperienceClick(index) {
     const backpackCopy = this.state.backpack.slice()
+    // increase a pokemon's experience by 20
     backpackCopy[index].pokemon_species.experience += 20
 
+    // increase pokemon's level if it is equal to that pokemon's growth_rate level
     backpackCopy[index].pokemon_species.growth_rate.map((levelInfo) => {
       if(backpackCopy[index].pokemon_species.level === levelInfo.level) {
         if(backpackCopy[index].pokemon_species.experience >= levelInfo.experience) {
@@ -193,14 +219,24 @@ class DataContainer extends Component {
       }
     })
 
+    // pokemon evolution by level
     let evolutionChain = backpackCopy[index].pokemon_species.evolution_chain
+    // changes the evolutionChain based on which pokemon is gaining experience
+    // digs deeper in evolution_chain until finding the evolution data for the chosen pokemon
     while(backpackCopy[index].pokemon_species.name !== evolutionChain.species.name) {
       evolutionChain = evolutionChain.evolves_to[0]
     }
 
+    // prevents pokemon not possessing an evolves_to array from evolving
+    // occurs if chosen pokemon is the highest evolved form for its evolution chain
     if(evolutionChain.evolves_to.length !== 0) {
+      // if chosen pokemon's level is equal to it's evolved form's minimum level
       if(backpackCopy[index].pokemon_species.level === evolutionChain.evolves_to[0].evolution_details[0].min_level) {
 
+        // if current pokemon's name is equal to it's evolution chain's name
+        // set evolved pokemon's experience and level to the current pokemon's values
+        // build the rest of the evolved pokemon obj and replace the current pokemon obj
+        // with the evolved pokemon obj
         const pokemonCopy = this.copy(this.state.pokemon)
         if(pokemonCopy[backpackCopy[index].entry_number - 1].pokemon_species.name === evolutionChain.species.name) {
 
@@ -214,16 +250,27 @@ class DataContainer extends Component {
     this.setState({backpack: backpackCopy})
   }
 
+  // evolve a pokemon by it's evolution item
   handleUseItemClick (index) {
     const backpackCopy = this.state.backpack
+
+    // for all content in backpack
+    // if there is both a pokemon and an item
+    // if the item's effect description contains the current pokemon's name
     backpackCopy.forEach((content, contentIndex) => {
       if((content.pokemon_species !== undefined) && (backpackCopy[index].effect !== undefined)) {
         if (backpackCopy[index].effect.includes(content.pokemon_species.name)) {
+
           let evolutionChain = backpackCopy[contentIndex].pokemon_species.evolution_chain
+          // changes the evolutionChain based on which pokemon is gaining experience
+          // digs deeper in evolution_chain until finding the evolution data for the chosen pokemon
           while(content.pokemon_species.name !== evolutionChain.species.name) {
             evolutionChain = evolutionChain.evolves_to[0]
           }
 
+          // create deep copy of pokemon array
+          // invoke evolvePokemonByItem to update the current pokemon to the
+          // appropriate pokemon in the evolution chain
           const pokemonCopy = this.copy(this.state.pokemon)
           this.evolvePokemonByItem(index, contentIndex, content.entry_number, backpackCopy, content)
           this.evolvePokemonByItem(index, contentIndex, content.entry_number + 1, backpackCopy, content)
@@ -235,6 +282,9 @@ class DataContainer extends Component {
   }
 
   render() {
+    // render error if it exists
+    // render `Loading...` while data is fetched from the pokeapi
+    // render the `Backpack`, `PokemonList`, and `ItemList` components 
     const { error, isLoadedPokemon, isLoadedItems, pokemon} = this.state
       if(error) {
         return <div>Error: {error.message}</div>

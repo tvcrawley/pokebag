@@ -7,6 +7,9 @@ function PokemonList(props) {
       <span onClick={() => props.onPokemonClick(index)}>{data.name}</span>
     </li>
   )
+
+  // loop through pokemon array
+  // render new array with pokemon names and click functionality
   return (
     <div className="PokemonList">
       <h2>PokemonList</h2>
