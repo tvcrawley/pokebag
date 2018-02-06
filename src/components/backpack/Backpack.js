@@ -1,5 +1,5 @@
-import React from 'react';
-import './Backpack.css';
+import React from 'react'
+import './Backpack.css'
 
 function Backpack (props) {
 
@@ -7,7 +7,7 @@ function Backpack (props) {
   const details = ((data, index) => {
     // render nothing if showDetails is false
     // otherwise render backpack content details
-    if(!data.showDetails) {
+    if (!data.showDetails) {
       return null
     } else {
         // if the content is a pokemon, render detailed pokemon data and functionality
@@ -39,7 +39,7 @@ function Backpack (props) {
                 Effect: {data.effect}
               </p>
             </div>
-        } else if(data.effect !== undefined) {
+        } else if (data.effect !== undefined) {
             while ((data.image === undefined)) {
               return <div>Loading (Please try again)</div>
             }
@@ -90,7 +90,7 @@ function Backpack (props) {
       <h2>Backpack</h2>
         {backpackList}
     </div>
-  );
+  )
 }
 
-export default Backpack;
+export default Backpack
