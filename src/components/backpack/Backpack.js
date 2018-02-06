@@ -24,7 +24,8 @@ class Backpack extends Component {
     super(props)
     this.state = {
       error: null,
-      isLoaded: false,
+      isLoadedPokemon: false,
+      isLoadedItems: false,
       backpack: [],
       // pokemon array = pokemon_entries from https://pokeapi.co/api/v2/pokedex/2/
       pokemon: [],
@@ -39,7 +40,7 @@ class Backpack extends Component {
     this.buildPokemon = this.buildPokemon.bind(this)
   }
 
-  componentDidMount() {
+  // componentDidMount() {
     // pokemonData.pokemon_entries.forEach((pokemon) => {
       // pokemon.pokemon_species.level = 1
       // pokemon.pokemon_species.experience = 0
@@ -51,77 +52,77 @@ class Backpack extends Component {
       // pokemon.pokemon_species.growth_rate = mediumSlow.levels
       // pokemon.pokemon_species.evolution_chain = pikachu.chain
     // })
-    itemsData.results.forEach((item) => {
-      switch(item.name) {
-        case 'sun-stone':
-          item.effect = sunStone.effect_entries[0].effect
-          break
-        case 'thunder-stone':
-          item.effect = thunderStone.effect_entries[0].effect
-          break
-        case 'moon-stone':
-          item.effect = moonStone.effect_entries[0].effect
-          break
-        case 'fire-stone':
-          item.effect = fireStone.effect_entries[0].effect
-          break
-        case 'water-stone':
-          item.effect = waterStone.effect_entries[0].effect
-          break
-        case 'leaf-stone':
-          item.effect = leafStone.effect_entries[0].effect
-          break
-        default:
-          // console.log(item)
-          break
-      }
-
-    })
-    // console.log(pokemonData)
-    // console.log(itemsData)
-    this.setState({
-      isLoaded: true,
-      pokemon: pokemonData.pokemon_entries,
-      items: itemsData.results
-    })
-  }
-
-  // componentDidMount() {
-    // axios.get("https://www.pokeapi.co/api/v2/pokedex/2/")
-    //   .then(
-    //     (result) => {
-    //       console.log('result: ', result)
-    //
-    //       this.setState({
-    //         isLoaded: true,
-    //         pokemon: result.data.pokemon_entries
-    //       })
-    //     },
-    //     (error) => {
-    //       this.setState({
-    //         isLoaded: true,
-    //         error
-    //       })
-    //     }
-    //   )
-  //   axios.get("https://pokeapi.co/api/v2/item/?limit=200")
-  //     .then(
-  //       (result) => {
-  //         console.log(result)
-  //         // console.log('Sun Stone?: ', result.data.results[79].name)
-  //         this.setState({
-  //           isLoaded: true,
-  //           items: result.data.results
-  //         })
-  //       },
-  //       (error) => {
-  //         this.setState({
-  //           isLoaded: true,
-  //           error
-  //         })
-  //       }
-  //     )
+  //   itemsData.results.forEach((item) => {
+  //     switch(item.name) {
+  //       case 'sun-stone':
+  //         item.effect = sunStone.effect_entries[0].effect
+  //         break
+  //       case 'thunder-stone':
+  //         item.effect = thunderStone.effect_entries[0].effect
+  //         break
+  //       case 'moon-stone':
+  //         item.effect = moonStone.effect_entries[0].effect
+  //         break
+  //       case 'fire-stone':
+  //         item.effect = fireStone.effect_entries[0].effect
+  //         break
+  //       case 'water-stone':
+  //         item.effect = waterStone.effect_entries[0].effect
+  //         break
+  //       case 'leaf-stone':
+  //         item.effect = leafStone.effect_entries[0].effect
+  //         break
+  //       default:
+  //         // console.log(item)
+  //         break
+  //     }
+  //
+  //   })
+  //   // console.log(pokemonData)
+  //   // console.log(itemsData)
+  //   this.setState({
+  //     isLoadedPokemon: true,
+  //     isLoadedItems: true,
+  //     pokemon: pokemonData.pokemon_entries,
+  //     items: itemsData.results
+  //   })
   // }
+
+  componentDidMount() {
+    axios.get("https://www.pokeapi.co/api/v2/pokedex/2/")
+      .then(
+        (result) => {
+          console.log('result: ', result)
+
+          this.setState({
+            isLoadedPokemon: true,
+            pokemon: result.data.pokemon_entries
+          })
+        },
+        (error) => {
+          this.setState({
+            isLoadedPokemon: true,
+            error
+          })
+        }
+      )
+    axios.get("https://pokeapi.co/api/v2/item/?limit=200")
+      .then(
+        (result) => {
+          console.log('result: ', result)
+          this.setState({
+            isLoadedItems: true,
+            items: result.data.results
+          })
+        },
+        (error) => {
+          this.setState({
+            isLoadedItems: true,
+            error
+          })
+        }
+      )
+  }
 
   // creates a deep copy of an array
   copy(obj){
@@ -174,6 +175,22 @@ class Backpack extends Component {
       return pokemonCopy[index]
   }
 
+  // builds one item obj
+  buildItem(index, itemCopy){
+
+    axios.get(itemCopy[index].url)
+      .then((result) => {
+        console.log("item result: ", result);
+        console.log('itemCopy[index]: ', itemCopy[index]);
+        itemCopy[index].effect = result.data.effect_entries[0].effect
+        return result
+      })
+      .catch((err) => {
+        console.log('error: ', err);
+      })
+      return itemCopy[index]
+  }
+
   handlePokemonClick(index){
     console.log('pokemon added')
 
@@ -192,7 +209,9 @@ class Backpack extends Component {
   handleItemClick(index){
     console.log('item added')
     const backpackCopy = this.state.backpack.slice()
-    backpackCopy.push(this.state.items[index])
+    const itemCopy = this.copy(this.state.items)
+
+    backpackCopy.push(this.buildItem(index, itemCopy))
     this.setState({
       backpack: backpackCopy
     })
@@ -315,10 +334,10 @@ class Backpack extends Component {
     }
   })
 
-    const { error, isLoaded, pokemon} = this.state
+    const { error, isLoadedPokemon, isLoadedItems, pokemon} = this.state
       if(error) {
         return <div>Error: {error.message}</div>
-      } else if(!isLoaded) {
+      } else if(!isLoadedPokemon || !isLoadedItems) {
         return <div>Loading...</div>
       } else {
         return (
