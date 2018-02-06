@@ -35,6 +35,8 @@ class Backpack extends Component {
     this.handleDeleteFromBackpack = this.handleDeleteFromBackpack.bind(this)
     this.handleBackpackDetailClick = this.handleBackpackDetailClick.bind(this)
     this.handleAddExperienceClick = this.handleAddExperienceClick.bind(this)
+    this.copy = this.copy.bind(this)
+    this.buildPokemon = this.buildPokemon.bind(this)
   }
 
   componentDidMount() {
@@ -121,41 +123,33 @@ class Backpack extends Component {
   //     )
   // }
 
-  handlePokemonClick(index){
-    console.log('pokemon added')
+  // creates a deep copy of an array
+  copy(obj){
+    let output
+    let value
+    let key
 
-    // helper function: creates a deep copy of an array
-    const copy = (obj) => {
-      let output
-      let value
-      let key
-
-      output = Array.isArray(obj) ? [] : {}
-      for(key in obj) {
-        value = obj[key]
-        output[key] = (typeof value === "object") ? copy(value) : value
-      }
-      return output
+    output = Array.isArray(obj) ? [] : {}
+    for(key in obj) {
+      value = obj[key]
+      output[key] = (typeof value === "object") ? this.copy(value) : value
     }
-    // end helper function
+    return output
+  }
 
-    const backpackCopy = this.state.backpack.slice()
-    const pokemonCopy = copy(this.state.pokemon)
-
-    // helper function: find kanto region pokemon description
+  // builds one pokemon obj
+  buildPokemon(index, pokemonCopy){
+    // find kanto region pokemon description
     const flavorTextObj = (pokemon) =>
       pokemon.flavor_text_entries.find((element) => {
         return element.version.name === ("red" || "yellow" || "blue")
       })
-    // end helper function
-
-    pokemonCopy[index].pokemon_species.experience = 0
-    pokemonCopy[index].pokemon_species.level = 1
 
     axios.get(pokemonCopy[index].pokemon_species.url)
       .then((result) => {
         console.log("species result: ", result);
         console.log('pokemonCopy[index]: ', pokemonCopy[index]);
+        console.log('flavorTextObj: ', flavorTextObj(result.data));
         pokemonCopy[index].pokemon_species.description = flavorTextObj(result.data).flavor_text
         return result
       })
@@ -174,7 +168,21 @@ class Backpack extends Component {
             pokemonCopy[index].pokemon_species.evolution_chain = result.data.chain
           })
       })
-    backpackCopy.push(pokemonCopy[index])
+      .catch((err) => {
+        console.log('error: ', err);
+      })
+      return pokemonCopy[index]
+  }
+
+  handlePokemonClick(index){
+    console.log('pokemon added')
+
+    const backpackCopy = this.state.backpack.slice()
+    const pokemonCopy = this.copy(this.state.pokemon)
+    pokemonCopy[index].pokemon_species.experience = 0
+    pokemonCopy[index].pokemon_species.level = 1
+
+    backpackCopy.push(this.buildPokemon(index, pokemonCopy))
     this.setState({
       backpack: backpackCopy
     })
@@ -227,21 +235,7 @@ class Backpack extends Component {
     }
     if(backpackCopy[index].pokemon_species.level === evolutionChain.evolves_to[0].evolution_details[0].min_level) {
 
-        // creates a deep copy of an array
-        const copy = (obj) => {
-          let output
-          let value
-          let key
-
-          output = Array.isArray(obj) ? [] : {}
-          for(key in obj) {
-            value = obj[key]
-            output[key] = (typeof value === "object") ? copy(value) : value
-          }
-          return output
-        }
-
-        const pokemonCopy = copy(this.state.pokemon)
+        const pokemonCopy = this.copy(this.state.pokemon)
         if(pokemonCopy[backpackCopy[index].entry_number - 1].pokemon_species.name === evolutionChain.species.name) {
 
           pokemonCopy[backpackCopy[index].entry_number].pokemon_species.experience = backpackCopy[index].pokemon_species.experience
@@ -266,21 +260,7 @@ class Backpack extends Component {
             evolutionChain = evolutionChain.evolves_to[0]
           }
 
-           // creates a deep copy of an array
-           const copy = (obj) => {
-             let output
-             let value
-             let key
-
-             output = Array.isArray(obj) ? [] : {}
-             for(key in obj) {
-               value = obj[key]
-               output[key] = (typeof value === "object") ? copy(value) : value
-             }
-             return output
-           }
-
-           const pokemonCopy = copy(this.state.pokemon)
+           const pokemonCopy = this.copy(this.state.pokemon)
            if(backpackCopy[index].effect.includes(pokemonCopy[content.entry_number].pokemon_species.name)) {
 
              pokemonCopy[content.entry_number].pokemon_species.experience = content.pokemon_species.experience
