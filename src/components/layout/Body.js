@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import './Body.css';
-import Backpack from '../backpack/Backpack';
+import DataContainer from '../dataContainer/DataContainer';
 
 class Body extends Component {
   render() {
     return (
       <div className="Body">
-        <Backpack />
+        <DataContainer />
       </div>
     );
   }
