@@ -1,5 +1,5 @@
-import React from 'react';
-import './Backpack.css';
+import React from 'react'
+import './Backpack.css'
 
 function Backpack (props) {
 
@@ -7,7 +7,7 @@ function Backpack (props) {
   const details = ((data, index) => {
     // render nothing if showDetails is false
     // otherwise render backpack content details
-    if(!data.showDetails) {
+    if (!data.showDetails) {
       return null
     } else {
         // if the content is a pokemon, render detailed pokemon data and functionality
@@ -28,18 +28,18 @@ function Backpack (props) {
             <p>Level: {data.pokemon_species.level}</p>
             <p>Description: {data.pokemon_species.description}</p>
           </div>
-        }  else if ((data.effect !== undefined) && (data.name.includes('-stone'))) {
+        }  else if ((data.effect !== undefined) && (data.name.includes('-stone') || data.name === 'rare-candy')) {
             while ((data.image === undefined)) {
               return <div>Loading (Please try again)</div>
             }
             return <div>
-              <p>Warning: Evolution stones are powerful! Make sure you don't accidentally evolve a Pokemon with the same evolution trigger.</p>
+              <p>Warning: Evolution items are powerful! Make sure you don't accidentally evolve a Pokemon with the same evolution trigger.</p>
               <img src={data.image} alt={data.name}/>
               <p>
                 Effect: {data.effect}
               </p>
             </div>
-        } else if(data.effect !== undefined) {
+        } else if (data.effect !== undefined) {
             while ((data.image === undefined)) {
               return <div>Loading (Please try again)</div>
             }
@@ -66,7 +66,7 @@ function Backpack (props) {
           {details(data, index)}
         </li>
       )
-    } else if ((data.effect !== undefined) && (data.name.includes('-stone'))) {
+    } else if ((data.effect !== undefined) && (data.name.includes('-stone') || data.name === 'rare-candy')) {
         return (
           <li key={index}>
             <span onClick={() => props.onBackpackDetailClick(index)}>{data.name}</span>
@@ -90,7 +90,7 @@ function Backpack (props) {
       <h2>Backpack</h2>
         {backpackList}
     </div>
-  );
+  )
 }
 
-export default Backpack;
+export default Backpack

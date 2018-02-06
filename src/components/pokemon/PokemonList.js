@@ -1,5 +1,5 @@
-import React from 'react';
-import './PokemonList.css';
+import React from 'react'
+import './PokemonList.css'
 
 function PokemonList(props) {
   // loop through pokemon array
@@ -15,7 +15,7 @@ function PokemonList(props) {
         ))}
       </ul>
     </div>
-  );
+  )
 }
 
-export default PokemonList;
+export default PokemonList

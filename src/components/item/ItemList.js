@@ -1,5 +1,5 @@
-import React from 'react';
-import './ItemList.css';
+import React from 'react'
+import './ItemList.css'
 
 function ItemList(props) {
   // loop through items array
@@ -15,7 +15,7 @@ function ItemList(props) {
         ))}
       </ul>
     </div>
-  );
+  )
 }
 
-export default ItemList;
+export default ItemList
