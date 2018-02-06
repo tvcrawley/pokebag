@@ -6,7 +6,7 @@ function PokemonList(props) {
   // render new array with pokemon names and click functionality
   return (
     <div className="PokemonList">
-      <h2>PokemonList</h2>
+      <h2>Pokémon List</h2>
       <ul>
         {props.pokemon.map((pokemon, index) => (
           <li key={pokemon.pokemon_species.name}>

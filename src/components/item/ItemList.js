@@ -6,7 +6,7 @@ function ItemList(props) {
   // render new array with item names and click functionality
   return (
     <div className="ItemList">
-      <h2>ItemList</h2>
+      <h2>Item List</h2>
       <ul>
         {props.items.map((item, index) => (
           <li key={item.name}>
