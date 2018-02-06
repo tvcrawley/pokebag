@@ -4,8 +4,6 @@ import axios from 'axios'
 import Backpack from '../backpack/Backpack'
 import PokemonList from '../pokemon/PokemonList'
 import ItemList from '../item/ItemList'
-import pokemonData from '../../data/pokemonData.json'
-import itemsData from '../../data/itemsData.json'
 
 class DataContainer extends Component {
   constructor(props) {
@@ -32,48 +30,39 @@ class DataContainer extends Component {
   }
 
   componentDidMount() {
-    this.setState({
-      isLoadedPokemon: true,
-      isLoadedItems: true,
-      pokemon: pokemonData.pokemon_entries,
-      items: itemsData.results
-    })
+    // sets the state of the pokemon array from the pokeapi
+    axios.get("https://www.pokeapi.co/api/v2/pokedex/2/")
+      .then(
+        (result) => {
+          this.setState({
+            isLoadedPokemon: true,
+            pokemon: result.data.pokemon_entries
+          })
+        },
+        (error) => {
+          this.setState({
+            isLoadedPokemon: true,
+            error
+          })
+        }
+      )
+    // sets the state of the items array from the pokeapi
+    axios.get("https://pokeapi.co/api/v2/item/?limit=100")
+      .then(
+        (result) => {
+          this.setState({
+            isLoadedItems: true,
+            items: result.data.results
+          })
+        },
+        (error) => {
+          this.setState({
+            isLoadedItems: true,
+            error
+          })
+        }
+      )
   }
-
-  // componentDidMount() {
-  //   // sets the state of the pokemon array from the pokeapi
-  //   axios.get("https://www.pokeapi.co/api/v2/pokedex/2/")
-  //     .then(
-  //       (result) => {
-  //         this.setState({
-  //           isLoadedPokemon: true,
-  //           pokemon: result.data.pokemon_entries
-  //         })
-  //       },
-  //       (error) => {
-  //         this.setState({
-  //           isLoadedPokemon: true,
-  //           error
-  //         })
-  //       }
-  //     )
-  //   // sets the state of the items array from the pokeapi
-  //   axios.get("https://pokeapi.co/api/v2/item/?limit=100")
-  //     .then(
-  //       (result) => {
-  //         this.setState({
-  //           isLoadedItems: true,
-  //           items: result.data.results
-  //         })
-  //       },
-  //       (error) => {
-  //         this.setState({
-  //           isLoadedItems: true,
-  //           error
-  //         })
-  //       }
-  //     )
-  // }
 
   // creates a deep copy of an array
   copy(obj) {
