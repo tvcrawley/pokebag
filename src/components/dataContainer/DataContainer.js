@@ -26,6 +26,9 @@ class DataContainer extends Component {
     this.handleUseItemClick = this.handleUseItemClick.bind(this)
     this.copy = this.copy.bind(this)
     this.buildPokemon = this.buildPokemon.bind(this)
+    this.buildItem = this.buildItem.bind(this)
+    this.evolvePokemonByItem = this.evolvePokemonByItem.bind(this)
+
   }
 
   componentDidMount() {
@@ -130,6 +133,17 @@ class DataContainer extends Component {
       return itemCopy[index]
   }
 
+  evolvePokemonByItem(index, contentIndex, contentEntryNumber, backpackCopy, content) {
+    const pokemonCopy = this.copy(this.state.pokemon)
+
+    if(backpackCopy[index].effect.includes(pokemonCopy[contentEntryNumber].pokemon_species.name)) {
+      pokemonCopy[contentEntryNumber].pokemon_species.experience = content.pokemon_species.experience
+      pokemonCopy[contentEntryNumber].pokemon_species.level = content.pokemon_species.level
+
+      backpackCopy.splice(contentIndex, 1, this.buildPokemon(contentEntryNumber, pokemonCopy))
+    }
+  }
+
   handlePokemonClick(index){
     const backpackCopy = this.state.backpack.slice()
     const pokemonCopy = this.copy(this.state.pokemon)
@@ -203,23 +217,18 @@ class DataContainer extends Component {
   handleUseItemClick (index) {
     const backpackCopy = this.state.backpack
     backpackCopy.forEach((content, contentIndex) => {
-      if(content.pokemon_species !== undefined) {
-
+      if((content.pokemon_species !== undefined) && (backpackCopy[index].effect !== undefined)) {
         if (backpackCopy[index].effect.includes(content.pokemon_species.name)) {
           let evolutionChain = backpackCopy[contentIndex].pokemon_species.evolution_chain
           while(content.pokemon_species.name !== evolutionChain.species.name) {
             evolutionChain = evolutionChain.evolves_to[0]
           }
 
-           const pokemonCopy = this.copy(this.state.pokemon)
-           if(backpackCopy[index].effect.includes(pokemonCopy[content.entry_number].pokemon_species.name)) {
-
-             pokemonCopy[content.entry_number].pokemon_species.experience = content.pokemon_species.experience
-             pokemonCopy[content.entry_number].pokemon_species.level = content.pokemon_species.level
-
-             backpackCopy.splice(contentIndex, 1, this.buildPokemon(content.entry_number, pokemonCopy))
-           }
-         }
+          const pokemonCopy = this.copy(this.state.pokemon)
+          this.evolvePokemonByItem(index, contentIndex, content.entry_number, backpackCopy, content)
+          this.evolvePokemonByItem(index, contentIndex, content.entry_number + 1, backpackCopy, content)
+          this.evolvePokemonByItem(index, contentIndex, content.entry_number + 2, backpackCopy, content)
+        }
       }
     })
     this.setState({backpack: backpackCopy})
