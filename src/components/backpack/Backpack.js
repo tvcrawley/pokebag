@@ -5,19 +5,6 @@ import PokemonList from '../pokemon/PokemonList';
 import ItemList from '../item/ItemList';
 import pokemonData from '../../data/pokemonData.json';
 import itemsData from '../../data/itemsData.json';
-import mediumSlow from '../../data/growth-rate/mediumSlow.json';
-import sunStone from '../../data/itemDetails/sunStone.json';
-import thunderStone from '../../data/itemDetails/thunderStone.json';
-import moonStone from '../../data/itemDetails/moonStone.json';
-import fireStone from '../../data/itemDetails/fireStone.json';
-import waterStone from '../../data/itemDetails/waterStone.json';
-import leafStone from '../../data/itemDetails/leafStone.json';
-import pikachu from '../../data/evolution/pikachu.json';
-import poliwag from '../../data/evolution/poliwag.json';
-import charmander from '../../data/evolution/charmander.json';
-import charmanderData from '../../data/pokemon/charmander.json';
-import poliwhirlData from '../../data/pokemon/poliwhirl.json';
-
 
 class Backpack extends Component {
   constructor(props) {
@@ -27,7 +14,6 @@ class Backpack extends Component {
       isLoadedPokemon: false,
       isLoadedItems: false,
       backpack: [],
-      // pokemon array = pokemon_entries from https://pokeapi.co/api/v2/pokedex/2/
       pokemon: [],
       items: []
     }
@@ -41,43 +27,6 @@ class Backpack extends Component {
   }
 
   // componentDidMount() {
-    // pokemonData.pokemon_entries.forEach((pokemon) => {
-      // pokemon.pokemon_species.level = 1
-      // pokemon.pokemon_species.experience = 0
-      // make a GET request for individual pokemon data from pokemon_species url
-      // const flavorTextObj = poliwhirlData.flavor_text_entries.find((element) => {
-      //   return element.version.name === ("red" || "yellow" || "blue")
-      // })
-      // pokemon.pokemon_species.description = flavorTextObj.flavor_text
-      // pokemon.pokemon_species.growth_rate = mediumSlow.levels
-      // pokemon.pokemon_species.evolution_chain = pikachu.chain
-    // })
-  //   itemsData.results.forEach((item) => {
-  //     switch(item.name) {
-  //       case 'sun-stone':
-  //         item.effect = sunStone.effect_entries[0].effect
-  //         break
-  //       case 'thunder-stone':
-  //         item.effect = thunderStone.effect_entries[0].effect
-  //         break
-  //       case 'moon-stone':
-  //         item.effect = moonStone.effect_entries[0].effect
-  //         break
-  //       case 'fire-stone':
-  //         item.effect = fireStone.effect_entries[0].effect
-  //         break
-  //       case 'water-stone':
-  //         item.effect = waterStone.effect_entries[0].effect
-  //         break
-  //       case 'leaf-stone':
-  //         item.effect = leafStone.effect_entries[0].effect
-  //         break
-  //       default:
-  //         // console.log(item)
-  //         break
-  //     }
-  //
-  //   })
   //   // console.log(pokemonData)
   //   // console.log(itemsData)
   //   this.setState({
@@ -88,41 +37,41 @@ class Backpack extends Component {
   //   })
   // }
 
-  componentDidMount() {
-    axios.get("https://www.pokeapi.co/api/v2/pokedex/2/")
-      .then(
-        (result) => {
-          console.log('result: ', result)
-
-          this.setState({
-            isLoadedPokemon: true,
-            pokemon: result.data.pokemon_entries
-          })
-        },
-        (error) => {
-          this.setState({
-            isLoadedPokemon: true,
-            error
-          })
-        }
-      )
-    axios.get("https://pokeapi.co/api/v2/item/?limit=200")
-      .then(
-        (result) => {
-          console.log('result: ', result)
-          this.setState({
-            isLoadedItems: true,
-            items: result.data.results
-          })
-        },
-        (error) => {
-          this.setState({
-            isLoadedItems: true,
-            error
-          })
-        }
-      )
-  }
+  // componentDidMount() {
+  //   axios.get("https://www.pokeapi.co/api/v2/pokedex/2/")
+  //     .then(
+  //       (result) => {
+  //         console.log('result: ', result)
+  //
+  //         this.setState({
+  //           isLoadedPokemon: true,
+  //           pokemon: result.data.pokemon_entries
+  //         })
+  //       },
+  //       (error) => {
+  //         this.setState({
+  //           isLoadedPokemon: true,
+  //           error
+  //         })
+  //       }
+  //     )
+  //   axios.get("https://pokeapi.co/api/v2/item/?limit=200")
+  //     .then(
+  //       (result) => {
+  //         console.log('result: ', result)
+  //         this.setState({
+  //           isLoadedItems: true,
+  //           items: result.data.results
+  //         })
+  //       },
+  //       (error) => {
+  //         this.setState({
+  //           isLoadedItems: true,
+  //           error
+  //         })
+  //       }
+  //     )
+  // }
 
   // creates a deep copy of an array
   copy(obj){
