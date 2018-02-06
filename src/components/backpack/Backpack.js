@@ -35,18 +35,22 @@ class Backpack extends Component {
     this.handleDeleteFromBackpack = this.handleDeleteFromBackpack.bind(this)
     this.handleBackpackDetailClick = this.handleBackpackDetailClick.bind(this)
     this.handleAddExperienceClick = this.handleAddExperienceClick.bind(this)
+    this.copy = this.copy.bind(this)
+    this.buildPokemon = this.buildPokemon.bind(this)
   }
 
   componentDidMount() {
-    pokemonData.pokemon_entries.forEach((pokemon) => {
-      pokemon.pokemon_species.level = 1
-      pokemon.pokemon_species.experience = 0
+    // pokemonData.pokemon_entries.forEach((pokemon) => {
+      // pokemon.pokemon_species.level = 1
+      // pokemon.pokemon_species.experience = 0
       // make a GET request for individual pokemon data from pokemon_species url
-      const flavorTextObj = poliwhirlData.flavor_text_entries.find((element) => {
-        return element.version.name === ("red" || "yellow" || "blue")
-      })
-      pokemon.pokemon_species.description = flavorTextObj.flavor_text
-    })
+      // const flavorTextObj = poliwhirlData.flavor_text_entries.find((element) => {
+      //   return element.version.name === ("red" || "yellow" || "blue")
+      // })
+      // pokemon.pokemon_species.description = flavorTextObj.flavor_text
+      // pokemon.pokemon_species.growth_rate = mediumSlow.levels
+      // pokemon.pokemon_species.evolution_chain = pikachu.chain
+    // })
     itemsData.results.forEach((item) => {
       switch(item.name) {
         case 'sun-stone':
@@ -83,23 +87,23 @@ class Backpack extends Component {
   }
 
   // componentDidMount() {
-  //   axios.get("https://www.pokeapi.co/api/v2/pokedex/2/")
-  //     .then(
-  //       (result) => {
-  //         console.log(result)
-  //         // console.log('Charmander?: ', result.data.pokemon_entries[3].pokemon_species.name)
-  //         this.setState({
-  //           isLoaded: true,
-  //           pokemon: result.data.pokemon_entries
-  //         })
-  //       },
-  //       (error) => {
-  //         this.setState({
-  //           isLoaded: true,
-  //           error
-  //         })
-  //       }
-  //     )
+    // axios.get("https://www.pokeapi.co/api/v2/pokedex/2/")
+    //   .then(
+    //     (result) => {
+    //       console.log('result: ', result)
+    //
+    //       this.setState({
+    //         isLoaded: true,
+    //         pokemon: result.data.pokemon_entries
+    //       })
+    //     },
+    //     (error) => {
+    //       this.setState({
+    //         isLoaded: true,
+    //         error
+    //       })
+    //     }
+    //   )
   //   axios.get("https://pokeapi.co/api/v2/item/?limit=200")
   //     .then(
   //       (result) => {
@@ -119,27 +123,66 @@ class Backpack extends Component {
   //     )
   // }
 
+  // creates a deep copy of an array
+  copy(obj){
+    let output
+    let value
+    let key
+
+    output = Array.isArray(obj) ? [] : {}
+    for(key in obj) {
+      value = obj[key]
+      output[key] = (typeof value === "object") ? this.copy(value) : value
+    }
+    return output
+  }
+
+  // builds one pokemon obj
+  buildPokemon(index, pokemonCopy){
+    // find kanto region pokemon description
+    const flavorTextObj = (pokemon) =>
+      pokemon.flavor_text_entries.find((element) => {
+        return element.version.name === ("red" || "yellow" || "blue")
+      })
+
+    axios.get(pokemonCopy[index].pokemon_species.url)
+      .then((result) => {
+        console.log("species result: ", result);
+        console.log('pokemonCopy[index]: ', pokemonCopy[index]);
+        console.log('flavorTextObj: ', flavorTextObj(result.data));
+        pokemonCopy[index].pokemon_species.description = flavorTextObj(result.data).flavor_text
+        return result
+      })
+      .then((result) => {
+        axios.get(result.data.growth_rate.url)
+          .then((result) => {
+            console.log("growth_rate result: ", result);
+            pokemonCopy[index].pokemon_species.growth_rate = result.data.levels
+          })
+          return result
+      })
+      .then((result) => {
+        axios.get(result.data.evolution_chain.url)
+          .then((result) => {
+            console.log("evolution_chain result: ", result);
+            pokemonCopy[index].pokemon_species.evolution_chain = result.data.chain
+          })
+      })
+      .catch((err) => {
+        console.log('error: ', err);
+      })
+      return pokemonCopy[index]
+  }
+
   handlePokemonClick(index){
     console.log('pokemon added')
 
-    // creates a deep copy of an array
-    const copy = (obj) => {
-      let output
-      let value
-      let key
-
-      output = Array.isArray(obj) ? [] : {}
-      for(key in obj) {
-        value = obj[key]
-        output[key] = (typeof value === "object") ? copy(value) : value
-      }
-      return output
-    }
-
     const backpackCopy = this.state.backpack.slice()
-    const pokemonCopy = copy(this.state.pokemon)
+    const pokemonCopy = this.copy(this.state.pokemon)
+    pokemonCopy[index].pokemon_species.experience = 0
+    pokemonCopy[index].pokemon_species.level = 1
 
-    backpackCopy.push(pokemonCopy[index])
+    backpackCopy.push(this.buildPokemon(index, pokemonCopy))
     this.setState({
       backpack: backpackCopy
     })
@@ -175,9 +218,9 @@ class Backpack extends Component {
 
   handleAddExperienceClick(index) {
     const backpackCopy = this.state.backpack.slice()
-    backpackCopy[index].pokemon_species.experience += 5
+    backpackCopy[index].pokemon_species.experience += 20
 
-    mediumSlow.levels.map((levelInfo) => {
+    backpackCopy[index].pokemon_species.growth_rate.map((levelInfo) => {
       if(backpackCopy[index].pokemon_species.level === levelInfo.level) {
         if(backpackCopy[index].pokemon_species.experience >= levelInfo.experience) {
           backpackCopy[index].pokemon_species.level++
@@ -186,34 +229,19 @@ class Backpack extends Component {
       }
     })
 
-    let apiData = charmander.chain
-    while(backpackCopy[index].pokemon_species.name != apiData.species.name) {
-      apiData = apiData.evolves_to[0]
+    let evolutionChain = backpackCopy[index].pokemon_species.evolution_chain
+    while(backpackCopy[index].pokemon_species.name != evolutionChain.species.name) {
+      evolutionChain = evolutionChain.evolves_to[0]
     }
-    if(backpackCopy[index].pokemon_species.level === apiData.evolves_to[0].evolution_details[0].min_level) {
+    if(backpackCopy[index].pokemon_species.level === evolutionChain.evolves_to[0].evolution_details[0].min_level) {
 
-        // creates a deep copy of an array
-        const copy = (obj) => {
-          let output
-          let value
-          let key
-
-          output = Array.isArray(obj) ? [] : {}
-          for(key in obj) {
-            value = obj[key]
-            output[key] = (typeof value === "object") ? copy(value) : value
-          }
-          return output
-        }
-
-        const pokemonCopy = copy(this.state.pokemon)
-        if(pokemonCopy[backpackCopy[index].entry_number - 1].pokemon_species.name === apiData.species.name) {
+        const pokemonCopy = this.copy(this.state.pokemon)
+        if(pokemonCopy[backpackCopy[index].entry_number - 1].pokemon_species.name === evolutionChain.species.name) {
 
           pokemonCopy[backpackCopy[index].entry_number].pokemon_species.experience = backpackCopy[index].pokemon_species.experience
           pokemonCopy[backpackCopy[index].entry_number].pokemon_species.level = backpackCopy[index].pokemon_species.level
 
-          backpackCopy.splice(index, 1, pokemonCopy[backpackCopy[index].entry_number])
-          backpackCopy.splice(index + 1, 1)
+          backpackCopy.splice(index, 1, this.buildPokemon(backpackCopy[index].entry_number, pokemonCopy))
         }
     }
 
@@ -226,33 +254,18 @@ class Backpack extends Component {
       if(content.pokemon_species != undefined) {
 
         if (backpackCopy[index].effect.includes(content.pokemon_species.name)) {
-          let apiData = pikachu.chain
-          while(content.pokemon_species.name != apiData.species.name) {
-            apiData = apiData.evolves_to[0]
+          let evolutionChain = backpackCopy[contentIndex].pokemon_species.evolution_chain
+          while(content.pokemon_species.name != evolutionChain.species.name) {
+            evolutionChain = evolutionChain.evolves_to[0]
           }
 
-           // creates a deep copy of an array
-           const copy = (obj) => {
-             let output
-             let value
-             let key
-
-             output = Array.isArray(obj) ? [] : {}
-             for(key in obj) {
-               value = obj[key]
-               output[key] = (typeof value === "object") ? copy(value) : value
-             }
-             return output
-           }
-
-           const pokemonCopy = copy(this.state.pokemon)
+           const pokemonCopy = this.copy(this.state.pokemon)
            if(backpackCopy[index].effect.includes(pokemonCopy[content.entry_number].pokemon_species.name)) {
 
              pokemonCopy[content.entry_number].pokemon_species.experience = content.pokemon_species.experience
              pokemonCopy[content.entry_number].pokemon_species.level = content.pokemon_species.level
 
-             backpackCopy.splice(contentIndex, 1, pokemonCopy[content.entry_number])
-             backpackCopy.splice(contentIndex + 1, 1)
+             backpackCopy.splice(contentIndex, 1, this.buildPokemon(content.entry_number, pokemonCopy))
            }
          }
       }
@@ -265,7 +278,7 @@ class Backpack extends Component {
       if(!data.showDetails) {
         return null
       } else {
-        if (data.pokemon_species != undefined) {
+        if ((data.pokemon_species != undefined) && (data.pokemon_species.description != undefined)) {
           return <div>
             <p>
               Experience: {data.pokemon_species.experience}
@@ -274,7 +287,7 @@ class Backpack extends Component {
             <p>Level: {data.pokemon_species.level}</p>
             <p>Description: {data.pokemon_species.description}</p>
           </div>
-        } else {
+        } else if(data.effect != undefined) {
           return <div>
             <p>
               Effect: {data.effect}
