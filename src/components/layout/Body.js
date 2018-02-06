@@ -1,15 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './Body.css';
-import Backpack from '../backpack/Backpack';
+import DataContainer from '../dataContainer/DataContainer';
 
-class Body extends Component {
-  render() {
-    return (
-      <div className="Body">
-        <Backpack />
-      </div>
-    );
-  }
+function Body(props) {
+  return (
+    <div className="Body">
+      <DataContainer />
+    </div>
+  );
 }
 
 export default Body;
