@@ -120,6 +120,13 @@ class DataContainer extends Component {
           .then((result) => {
             pokemonCopy[index].pokemon_species.evolution_chain = result.data.chain
           })
+        return result
+      })
+      .then((result) => {
+        axios.get(result.data.varieties[0].pokemon.url)
+          .then((result) => {
+            pokemonCopy[index].pokemon_species.image = result.data.sprites.front_default
+          })
       })
       .catch((err) => {
         console.error('error: ', err);
@@ -129,11 +136,12 @@ class DataContainer extends Component {
 
   // builds one item obj
   buildItem(index, itemCopy){
-    // gets effect info specific for this item from the pokeapi
-    // sets effect on item obj
+    // gets effect and image info specific for this item from the pokeapi
+    // sets effect and image on item obj
     axios.get(itemCopy[index].url)
       .then((result) => {
         itemCopy[index].effect = result.data.effect_entries[0].effect
+        itemCopy[index].image = result.data.sprites.default
         return result
       })
       .catch((err) => {
