@@ -64,7 +64,7 @@ Extra Credit:
 5. Incorporate PokeAPI (pokémon and items).
 6. Upgrade (evolve) pokémon when pokémon is at correct level OR correct item is used.
 7. Old pokémon should be removed from bag once evolved (new pokémon should take its place).
-8. When adding pokémon to backpack, make a GET request for custom. property values and build individual pokémon objects with those values.
+8. When adding pokémon to backpack, make a GET request for custom property values and build individual pokémon objects with those values.
 
 _Notes_:
 - Rare candy is allowed for evolution.
@@ -82,7 +82,7 @@ _Notes_:
 
 #### Installation instructions
 ##### Viewing the App
-Navigate to [https://tvlangley.github.io/pokebag/](https://tvlangley.github.io/parkFinder/).
+Navigate to [https://tvlangley.github.io/pokebag/](https://tvlangley.github.io/pokebag/).
 
 OR
 1. Unzip the project files.
