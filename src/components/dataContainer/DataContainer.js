@@ -45,7 +45,6 @@ class DataContainer extends Component {
   //   axios.get("https://www.pokeapi.co/api/v2/pokedex/2/")
   //     .then(
   //       (result) => {
-  //
   //         this.setState({
   //           isLoadedPokemon: true,
   //           pokemon: result.data.pokemon_entries
@@ -59,7 +58,7 @@ class DataContainer extends Component {
   //       }
   //     )
   //   // sets the state of the items array from the pokeapi
-  //   axios.get("https://pokeapi.co/api/v2/item/?limit=200")
+  //   axios.get("https://pokeapi.co/api/v2/item/?limit=100")
   //     .then(
   //       (result) => {
   //         this.setState({
@@ -284,7 +283,7 @@ class DataContainer extends Component {
   render() {
     // render error if it exists
     // render `Loading...` while data is fetched from the pokeapi
-    // render the `Backpack`, `PokemonList`, and `ItemList` components 
+    // render the `Backpack`, `PokemonList`, and `ItemList` components
     const { error, isLoadedPokemon, isLoadedItems, pokemon} = this.state
       if(error) {
         return <div>Error: {error.message}</div>
