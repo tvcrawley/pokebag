@@ -241,8 +241,7 @@ class Backpack extends Component {
           pokemonCopy[backpackCopy[index].entry_number].pokemon_species.experience = backpackCopy[index].pokemon_species.experience
           pokemonCopy[backpackCopy[index].entry_number].pokemon_species.level = backpackCopy[index].pokemon_species.level
 
-          backpackCopy.splice(index, 1, pokemonCopy[backpackCopy[index].entry_number])
-          backpackCopy.splice(index + 1, 1)
+          backpackCopy.splice(index, 1, this.buildPokemon(backpackCopy[index].entry_number, pokemonCopy))
         }
     }
 
@@ -266,8 +265,7 @@ class Backpack extends Component {
              pokemonCopy[content.entry_number].pokemon_species.experience = content.pokemon_species.experience
              pokemonCopy[content.entry_number].pokemon_species.level = content.pokemon_species.level
 
-             backpackCopy.splice(contentIndex, 1, pokemonCopy[content.entry_number])
-             backpackCopy.splice(contentIndex + 1, 1)
+             backpackCopy.splice(contentIndex, 1, this.buildPokemon(content.entry_number, pokemonCopy))
            }
          }
       }
