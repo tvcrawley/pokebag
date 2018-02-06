@@ -2,12 +2,6 @@ import React from 'react';
 import './ItemList.css';
 
 function ItemList(props) {
-  const itemList = props.items.map((data, index) =>
-    <li key={index}>
-      <span onClick={() => props.onItemClick(index)}>{data.name}</span>
-    </li>
-  )
-
   // loop through items array
   // render new array with item names and click functionality
   return (

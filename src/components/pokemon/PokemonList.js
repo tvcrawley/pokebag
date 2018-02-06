@@ -2,12 +2,6 @@ import React from 'react';
 import './PokemonList.css';
 
 function PokemonList(props) {
-  const pokemonList = props.pokemon.map((data, index) =>
-    <li key={index}>
-      <span onClick={() => props.onPokemonClick(index)}>{data.name}</span>
-    </li>
-  )
-
   // loop through pokemon array
   // render new array with pokemon names and click functionality
   return (
