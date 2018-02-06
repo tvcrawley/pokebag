@@ -278,7 +278,7 @@ class Backpack extends Component {
       if(!data.showDetails) {
         return null
       } else {
-        if (data.pokemon_species != undefined) {
+        if ((data.pokemon_species != undefined) && (data.pokemon_species.description != undefined)) {
           return <div>
             <p>
               Experience: {data.pokemon_species.experience}
@@ -287,7 +287,7 @@ class Backpack extends Component {
             <p>Level: {data.pokemon_species.level}</p>
             <p>Description: {data.pokemon_species.description}</p>
           </div>
-        } else {
+        } else if(data.effect != undefined) {
           return <div>
             <p>
               Effect: {data.effect}
