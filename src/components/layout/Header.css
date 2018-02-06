@@ -1,2 +1,7 @@
 .Header {
+  background: #fff;
+  border: solid #8b0000;
+  color: #f00;
+  padding: 0.5% 0;
+  text-shadow: 2px 1px #8b0000;
 }
