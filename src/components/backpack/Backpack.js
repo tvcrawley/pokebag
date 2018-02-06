@@ -10,12 +10,17 @@ function Backpack (props) {
     if(!data.showDetails) {
       return null
     } else {
-      // if the content is a pokemon, render detailed pokemon data and functionality
-      // if the content is an evolution item, render a user warning message and
-      // detailed evolution item data
-      // if the content is not an evolution item, render detailed item data
-        if ((data.pokemon_species !== undefined) && (data.pokemon_species.description !== undefined)) {
+        // if the content is a pokemon, render detailed pokemon data and functionality
+        // if the content is an evolution item, render a user warning message and
+        // detailed evolution item data
+        // if the content is not an evolution item, render detailed item data
+        // while there is no image, render `Loading (Please try again)`
+        if ((data.pokemon_species !== undefined) ) {
+          while ((data.pokemon_species.image === undefined)) {
+            return <div>Loading (Please try again)</div>
+          }
           return <div>
+            <img src={data.pokemon_species.image} alt={data.pokemon_species.name}/>
             <p>
               Experience: {data.pokemon_species.experience}
               <span onClick={() => props.onAddExperienceClick(index)}>+</span>
@@ -24,14 +29,22 @@ function Backpack (props) {
             <p>Description: {data.pokemon_species.description}</p>
           </div>
         }  else if ((data.effect !== undefined) && (data.name.includes('-stone'))) {
+            while ((data.image === undefined)) {
+              return <div>Loading (Please try again)</div>
+            }
             return <div>
               <p>Warning: Evolution stones are powerful! Make sure you don't accidentally evolve a Pokemon with the same evolution trigger.</p>
+              <img src={data.image} alt={data.name}/>
               <p>
                 Effect: {data.effect}
               </p>
             </div>
         } else if(data.effect !== undefined) {
+            while ((data.image === undefined)) {
+              return <div>Loading (Please try again)</div>
+            }
             return <div>
+              <img src={data.image} alt={data.name}/>
               <p>
                 Effect: {data.effect}
               </p>
