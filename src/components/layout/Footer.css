@@ -5,6 +5,7 @@
 }
 
 .Footer a {
-  color: red;
+  color: #f00;
+  font-size: 125%;
   text-decoration: none;
 }

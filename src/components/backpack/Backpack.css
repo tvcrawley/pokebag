@@ -1,2 +1,42 @@
 .Backpack {
+  background-color: #8b0000;
+  padding: 2%;
+}
+
+.Backpack h2 {
+  border-bottom: 2px solid #fff;
+  border-top: 2px solid #fff;
+  margin: 1% 30%;
+  padding: 1% 0;
+}
+
+.Backpack img {
+  background-color: #fff;
+  border-radius: 5px;
+  height: 13%;
+  margin-top: 4%;
+  width: 13%;
+}
+
+.Backpack li {
+  list-style: none;
+  padding: 2%;
+}
+
+.Backpack span {
+  border: #f00 solid 2.5px;
+  padding: 1%;
+}
+
+.Backpack p > span {
+  margin: 1%;
+}
+
+.Backpack span:hover {
+  cursor: pointer;
+}
+
+.hightlight {
+  font-style: italic;
+  margin-top: 3%;
 }

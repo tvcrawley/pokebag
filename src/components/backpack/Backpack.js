@@ -17,20 +17,20 @@ function Backpack (props) {
         // while there is no image, render `Loading (Please try again)`
         if ((data.pokemon_species !== undefined) ) {
           while ((data.pokemon_species.image === undefined)) {
-            return <div>Loading (Please try again)</div>
+            return <div className='hightlight'>Loading (Please try again)</div>
           }
           return <div>
             <img src={data.pokemon_species.image} alt={data.pokemon_species.name}/>
+            <p>Description: {data.pokemon_species.description}</p>
             <p>
               Experience: {data.pokemon_species.experience}
               <span onClick={() => props.onAddExperienceClick(index)}>+</span>
             </p>
             <p>Level: {data.pokemon_species.level}</p>
-            <p>Description: {data.pokemon_species.description}</p>
           </div>
         }  else if ((data.effect !== undefined) && (data.name.includes('-stone') || data.name === 'rare-candy')) {
             while ((data.image === undefined)) {
-              return <div>Loading (Please try again)</div>
+              return <div className='hightlight'>Loading (Please try again)</div>
             }
             return <div>
               <p>Warning: Evolution items are powerful! Make sure you don't accidentally evolve a Pokemon with the same evolution trigger.</p>
@@ -41,7 +41,7 @@ function Backpack (props) {
             </div>
         } else if (data.effect !== undefined) {
             while ((data.image === undefined)) {
-              return <div>Loading (Please try again)</div>
+              return <div className='hightlight'>Loading (Please try again)</div>
             }
             return <div>
               <img src={data.image} alt={data.name}/>
