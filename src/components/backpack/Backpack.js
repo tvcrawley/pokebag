@@ -15,12 +15,19 @@ function Backpack (props) {
             <p>Level: {data.pokemon_species.level}</p>
             <p>Description: {data.pokemon_species.description}</p>
           </div>
+        }  else if ((data.effect !== undefined) && (data.name.includes('-stone'))) {
+            return <div>
+              <p>Warning: Evolution stones are powerful! Make sure you don't accidentally evolve a Pokemon with the same evolution trigger.</p>
+              <p>
+                Effect: {data.effect}
+              </p>
+            </div>
         } else if(data.effect !== undefined) {
-          return <div>
-            <p>
-              Effect: {data.effect}
-            </p>
-          </div>
+            return <div>
+              <p>
+                Effect: {data.effect}
+              </p>
+            </div>
         }
     }
   })
@@ -34,16 +41,24 @@ function Backpack (props) {
           {details(data, index)}
         </li>
       )
-      } else {
-          return (
-            <li key={index}>
-              <span onClick={() => props.onBackpackDetailClick(index)}>{data.name}</span>
-              <span onClick={() => props.onUseItemClick(index)}>Use</span>
-              <span onClick={() => props.onDeleteFromBackpack(index)}>X</span>
-              {details(data, index)}
-            </li>
-          )
-      }
+    } else if ((data.effect !== undefined) && (data.name.includes('-stone'))) {
+        return (
+          <li key={index}>
+            <span onClick={() => props.onBackpackDetailClick(index)}>{data.name}</span>
+            <span onClick={() => props.onUseItemClick(index)}>Use</span>
+            <span onClick={() => props.onDeleteFromBackpack(index)}>X</span>
+            {details(data, index)}
+          </li>
+        )
+    } else {
+        return (
+          <li key={index}>
+            <span onClick={() => props.onBackpackDetailClick(index)}>{data.name}</span>
+            <span onClick={() => props.onDeleteFromBackpack(index)}>X</span>
+            {details(data, index)}
+          </li>
+        )
+    }
   })
   return (
     <div className="Backpack">
