@@ -39,15 +39,15 @@ class Backpack extends Component {
 
   componentDidMount() {
     // pokemonData.pokemon_entries.forEach((pokemon) => {
-    //   pokemon.pokemon_species.level = 1
-    //   pokemon.pokemon_species.experience = 0
-    //   // make a GET request for individual pokemon data from pokemon_species url
-    //   const flavorTextObj = poliwhirlData.flavor_text_entries.find((element) => {
-    //     return element.version.name === ("red" || "yellow" || "blue")
-    //   })
-    //   pokemon.pokemon_species.description = flavorTextObj.flavor_text
-    //   pokemon.pokemon_species.growth_rate = mediumSlow.levels
-    //   pokemon.pokemon_species.evolution_chain = pikachu.chain
+      // pokemon.pokemon_species.level = 1
+      // pokemon.pokemon_species.experience = 0
+      // make a GET request for individual pokemon data from pokemon_species url
+      // const flavorTextObj = poliwhirlData.flavor_text_entries.find((element) => {
+      //   return element.version.name === ("red" || "yellow" || "blue")
+      // })
+      // pokemon.pokemon_species.description = flavorTextObj.flavor_text
+      // pokemon.pokemon_species.growth_rate = mediumSlow.levels
+      // pokemon.pokemon_species.evolution_chain = pikachu.chain
     // })
     itemsData.results.forEach((item) => {
       switch(item.name) {
@@ -79,39 +79,29 @@ class Backpack extends Component {
     // console.log(itemsData)
     this.setState({
       isLoaded: true,
-      // pokemon: pokemonData.pokemon_entries,
+      pokemon: pokemonData.pokemon_entries,
       items: itemsData.results
     })
   }
 
-  componentDidMount() {
-    axios.get("https://www.pokeapi.co/api/v2/pokedex/2/")
-      .then(
-        (result) => {
-          console.log(result)
-          result.data.pokemon_entries.forEach((pokemon) => {
-            pokemon.pokemon_species.level = 1
-            pokemon.pokemon_species.experience = 0
-            // make a GET request for individual pokemon data from pokemon_species url
-            const flavorTextObj = poliwhirlData.flavor_text_entries.find((element) => {
-              return element.version.name === ("red" || "yellow" || "blue")
-            })
-            pokemon.pokemon_species.description = flavorTextObj.flavor_text
-            pokemon.pokemon_species.growth_rate = mediumSlow.levels
-            pokemon.pokemon_species.evolution_chain = charmander.chain
-          })
-          this.setState({
-            isLoaded: true,
-            pokemon: result.data.pokemon_entries
-          })
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error
-          })
-        }
-      )
+  // componentDidMount() {
+    // axios.get("https://www.pokeapi.co/api/v2/pokedex/2/")
+    //   .then(
+    //     (result) => {
+    //       console.log('result: ', result)
+    //
+    //       this.setState({
+    //         isLoaded: true,
+    //         pokemon: result.data.pokemon_entries
+    //       })
+    //     },
+    //     (error) => {
+    //       this.setState({
+    //         isLoaded: true,
+    //         error
+    //       })
+    //     }
+    //   )
   //   axios.get("https://pokeapi.co/api/v2/item/?limit=200")
   //     .then(
   //       (result) => {
@@ -129,12 +119,12 @@ class Backpack extends Component {
   //         })
   //       }
   //     )
-  }
+  // }
 
   handlePokemonClick(index){
     console.log('pokemon added')
 
-    // creates a deep copy of an array
+    // helper function: creates a deep copy of an array
     const copy = (obj) => {
       let output
       let value
@@ -147,10 +137,43 @@ class Backpack extends Component {
       }
       return output
     }
+    // end helper function
 
     const backpackCopy = this.state.backpack.slice()
     const pokemonCopy = copy(this.state.pokemon)
 
+    // helper function: find kanto region pokemon description
+    const flavorTextObj = (pokemon) =>
+      pokemon.flavor_text_entries.find((element) => {
+        return element.version.name === ("red" || "yellow" || "blue")
+      })
+    // end helper function
+
+    pokemonCopy[index].pokemon_species.experience = 0
+    pokemonCopy[index].pokemon_species.level = 1
+
+    axios.get(pokemonCopy[index].pokemon_species.url)
+      .then((result) => {
+        console.log("species result: ", result);
+        console.log('pokemonCopy[index]: ', pokemonCopy[index]);
+        pokemonCopy[index].pokemon_species.description = flavorTextObj(result.data).flavor_text
+        return result
+      })
+      .then((result) => {
+        axios.get(result.data.growth_rate.url)
+          .then((result) => {
+            console.log("growth_rate result: ", result);
+            pokemonCopy[index].pokemon_species.growth_rate = result.data.levels
+          })
+          return result
+      })
+      .then((result) => {
+        axios.get(result.data.evolution_chain.url)
+          .then((result) => {
+            console.log("evolution_chain result: ", result);
+            pokemonCopy[index].pokemon_species.evolution_chain = result.data.chain
+          })
+      })
     backpackCopy.push(pokemonCopy[index])
     this.setState({
       backpack: backpackCopy
