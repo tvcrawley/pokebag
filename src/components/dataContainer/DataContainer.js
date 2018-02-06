@@ -29,8 +29,6 @@ class DataContainer extends Component {
   }
 
   componentDidMount() {
-    // console.log(pokemonData)
-    // console.log(itemsData)
     this.setState({
       isLoadedPokemon: true,
       isLoadedItems: true,
@@ -43,7 +41,6 @@ class DataContainer extends Component {
   //   axios.get("https://www.pokeapi.co/api/v2/pokedex/2/")
   //     .then(
   //       (result) => {
-  //         console.log('result: ', result)
   //
   //         this.setState({
   //           isLoadedPokemon: true,
@@ -60,7 +57,6 @@ class DataContainer extends Component {
   //   axios.get("https://pokeapi.co/api/v2/item/?limit=200")
   //     .then(
   //       (result) => {
-  //         console.log('result: ', result)
   //         this.setState({
   //           isLoadedItems: true,
   //           items: result.data.results
@@ -99,16 +95,12 @@ class DataContainer extends Component {
 
     axios.get(pokemonCopy[index].pokemon_species.url)
       .then((result) => {
-        console.log("species result: ", result);
-        console.log('pokemonCopy[index]: ', pokemonCopy[index]);
-        console.log('flavorTextObj: ', flavorTextObj(result.data));
         pokemonCopy[index].pokemon_species.description = flavorTextObj(result.data).flavor_text
         return result
       })
       .then((result) => {
         axios.get(result.data.growth_rate.url)
           .then((result) => {
-            console.log("growth_rate result: ", result);
             pokemonCopy[index].pokemon_species.growth_rate = result.data.levels
           })
           return result
@@ -116,35 +108,29 @@ class DataContainer extends Component {
       .then((result) => {
         axios.get(result.data.evolution_chain.url)
           .then((result) => {
-            console.log("evolution_chain result: ", result);
             pokemonCopy[index].pokemon_species.evolution_chain = result.data.chain
           })
       })
       .catch((err) => {
-        console.log('error: ', err);
+        console.error('error: ', err);
       })
       return pokemonCopy[index]
   }
 
   // builds one item obj
   buildItem(index, itemCopy){
-
     axios.get(itemCopy[index].url)
       .then((result) => {
-        console.log("item result: ", result);
-        console.log('itemCopy[index]: ', itemCopy[index]);
         itemCopy[index].effect = result.data.effect_entries[0].effect
         return result
       })
       .catch((err) => {
-        console.log('error: ', err);
+        console.error('error: ', err);
       })
       return itemCopy[index]
   }
 
   handlePokemonClick(index){
-    console.log('pokemon added')
-
     const backpackCopy = this.state.backpack.slice()
     const pokemonCopy = this.copy(this.state.pokemon)
     pokemonCopy[index].pokemon_species.experience = 0
@@ -154,11 +140,9 @@ class DataContainer extends Component {
     this.setState({
       backpack: backpackCopy
     })
-    console.log(this.state.backpack)
   }
 
   handleItemClick(index){
-    console.log('item added')
     const backpackCopy = this.state.backpack.slice()
     const itemCopy = this.copy(this.state.items)
 
@@ -166,7 +150,6 @@ class DataContainer extends Component {
     this.setState({
       backpack: backpackCopy
     })
-    console.log(this.state.backpack)
   }
 
   handleDeleteFromBackpack(index) {
@@ -175,14 +158,12 @@ class DataContainer extends Component {
     this.setState({
       backpack: backpackCopy
     })
-    console.log(this.state.backpack)
   }
 
   handleBackpackDetailClick(index) {
     const backpackCopy = this.state.backpack.slice()
     backpackCopy[index] = Object.assign({}, backpackCopy[index])
     backpackCopy[index].showDetails = !backpackCopy[index].showDetails
-    console.log(backpackCopy[index].showDetails)
     this.setState({backpack: backpackCopy})
   }
 
@@ -194,7 +175,6 @@ class DataContainer extends Component {
       if(backpackCopy[index].pokemon_species.level === levelInfo.level) {
         if(backpackCopy[index].pokemon_species.experience >= levelInfo.experience) {
           backpackCopy[index].pokemon_species.level++
-          console.log(backpackCopy[index])
         }
       }
     })
