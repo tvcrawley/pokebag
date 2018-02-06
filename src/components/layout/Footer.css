@@ -1,2 +1,10 @@
 .Footer {
+  background: #fff;
+  border: solid #8b0000;
+  padding: 0.5% 0;
+}
+
+.Footer a {
+  color: red;
+  text-decoration: none;
 }
