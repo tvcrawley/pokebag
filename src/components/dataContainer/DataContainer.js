@@ -28,52 +28,52 @@ class DataContainer extends Component {
     this.buildPokemon = this.buildPokemon.bind(this)
   }
 
-  // componentDidMount() {
-  //   // console.log(pokemonData)
-  //   // console.log(itemsData)
-  //   this.setState({
-  //     isLoadedPokemon: true,
-  //     isLoadedItems: true,
-  //     pokemon: pokemonData.pokemon_entries,
-  //     items: itemsData.results
-  //   })
-  // }
-
   componentDidMount() {
-    axios.get("https://www.pokeapi.co/api/v2/pokedex/2/")
-      .then(
-        (result) => {
-          console.log('result: ', result)
-
-          this.setState({
-            isLoadedPokemon: true,
-            pokemon: result.data.pokemon_entries
-          })
-        },
-        (error) => {
-          this.setState({
-            isLoadedPokemon: true,
-            error
-          })
-        }
-      )
-    axios.get("https://pokeapi.co/api/v2/item/?limit=200")
-      .then(
-        (result) => {
-          console.log('result: ', result)
-          this.setState({
-            isLoadedItems: true,
-            items: result.data.results
-          })
-        },
-        (error) => {
-          this.setState({
-            isLoadedItems: true,
-            error
-          })
-        }
-      )
+    // console.log(pokemonData)
+    // console.log(itemsData)
+    this.setState({
+      isLoadedPokemon: true,
+      isLoadedItems: true,
+      pokemon: pokemonData.pokemon_entries,
+      items: itemsData.results
+    })
   }
+
+  // componentDidMount() {
+  //   axios.get("https://www.pokeapi.co/api/v2/pokedex/2/")
+  //     .then(
+  //       (result) => {
+  //         console.log('result: ', result)
+  //
+  //         this.setState({
+  //           isLoadedPokemon: true,
+  //           pokemon: result.data.pokemon_entries
+  //         })
+  //       },
+  //       (error) => {
+  //         this.setState({
+  //           isLoadedPokemon: true,
+  //           error
+  //         })
+  //       }
+  //     )
+  //   axios.get("https://pokeapi.co/api/v2/item/?limit=200")
+  //     .then(
+  //       (result) => {
+  //         console.log('result: ', result)
+  //         this.setState({
+  //           isLoadedItems: true,
+  //           items: result.data.results
+  //         })
+  //       },
+  //       (error) => {
+  //         this.setState({
+  //           isLoadedItems: true,
+  //           error
+  //         })
+  //       }
+  //     )
+  // }
 
   // creates a deep copy of an array
   copy(obj){
@@ -200,7 +200,7 @@ class DataContainer extends Component {
     })
 
     let evolutionChain = backpackCopy[index].pokemon_species.evolution_chain
-    while(backpackCopy[index].pokemon_species.name != evolutionChain.species.name) {
+    while(backpackCopy[index].pokemon_species.name !== evolutionChain.species.name) {
       evolutionChain = evolutionChain.evolves_to[0]
     }
     if(backpackCopy[index].pokemon_species.level === evolutionChain.evolves_to[0].evolution_details[0].min_level) {
@@ -220,11 +220,11 @@ class DataContainer extends Component {
   handleUseItemClick (index) {
     const backpackCopy = this.state.backpack
     backpackCopy.forEach((content, contentIndex) => {
-      if(content.pokemon_species != undefined) {
+      if(content.pokemon_species !== undefined) {
 
         if (backpackCopy[index].effect.includes(content.pokemon_species.name)) {
           let evolutionChain = backpackCopy[contentIndex].pokemon_species.evolution_chain
-          while(content.pokemon_species.name != evolutionChain.species.name) {
+          while(content.pokemon_species.name !== evolutionChain.species.name) {
             evolutionChain = evolutionChain.evolves_to[0]
           }
 
