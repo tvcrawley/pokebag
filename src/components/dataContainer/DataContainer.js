@@ -203,7 +203,9 @@ class DataContainer extends Component {
     while(backpackCopy[index].pokemon_species.name !== evolutionChain.species.name) {
       evolutionChain = evolutionChain.evolves_to[0]
     }
-    if(backpackCopy[index].pokemon_species.level === evolutionChain.evolves_to[0].evolution_details[0].min_level) {
+
+    if(evolutionChain.evolves_to.length !== 0) {
+      if(backpackCopy[index].pokemon_species.level === evolutionChain.evolves_to[0].evolution_details[0].min_level) {
 
         const pokemonCopy = this.copy(this.state.pokemon)
         if(pokemonCopy[backpackCopy[index].entry_number - 1].pokemon_species.name === evolutionChain.species.name) {
@@ -213,6 +215,7 @@ class DataContainer extends Component {
 
           backpackCopy.splice(index, 1, this.buildPokemon(backpackCopy[index].entry_number, pokemonCopy))
         }
+      }
     }
     this.setState({backpack: backpackCopy})
   }
