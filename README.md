@@ -99,7 +99,7 @@ _Notes_:
 * No displays of: Game Version, Location, Encounters, Contests, or any internal
   data attributes (e.g. 'order', 'id').
 * App is session based (no users/auth).
-* Port should be `localhost:8080`.
+* Port should be `localhost:8000`.
 
 #### Technologies used
 
@@ -119,7 +119,7 @@ OR
 1. Unzip the project files.
 1. Install dependencies with `npm install`.
 1. Run `npm start` in the terminal.
-1. Navigate to [http://localhost:8080/](http://localhost:8080/).
+1. Navigate to [http://localhost:8000/](http://localhost:8000/).
 
 ##### Viewing the Code
 
