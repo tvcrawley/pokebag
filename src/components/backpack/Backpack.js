@@ -28,12 +28,12 @@ function Backpack (props) {
             <p>Level: {data.pokemon_species.level}</p>
             <p>Description: {data.pokemon_species.description}</p>
           </div>
-        }  else if ((data.effect !== undefined) && (data.name.includes('-stone'))) {
+        }  else if ((data.effect !== undefined) && (data.name.includes('-stone') || data.name === 'rare-candy')) {
             while ((data.image === undefined)) {
               return <div>Loading (Please try again)</div>
             }
             return <div>
-              <p>Warning: Evolution stones are powerful! Make sure you don't accidentally evolve a Pokemon with the same evolution trigger.</p>
+              <p>Warning: Evolution items are powerful! Make sure you don't accidentally evolve a Pokemon with the same evolution trigger.</p>
               <img src={data.image} alt={data.name}/>
               <p>
                 Effect: {data.effect}
@@ -66,7 +66,7 @@ function Backpack (props) {
           {details(data, index)}
         </li>
       )
-    } else if ((data.effect !== undefined) && (data.name.includes('-stone'))) {
+    } else if ((data.effect !== undefined) && (data.name.includes('-stone') || data.name === 'rare-candy')) {
         return (
           <li key={index}>
             <span onClick={() => props.onBackpackDetailClick(index)}>{data.name}</span>

@@ -262,26 +262,46 @@ class DataContainer extends Component {
     const backpackCopy = this.state.backpack
 
     // for all content in backpack
-    // if there is both a pokemon and an item
-    // if the item's effect description contains the current pokemon's name
     backpackCopy.forEach((content, contentIndex) => {
-      if((content.pokemon_species !== undefined) && (backpackCopy[index].effect !== undefined)) {
+      // if there is both a pokemon and an item
+      if ((content.pokemon_species !== undefined) && (backpackCopy[index].effect !== undefined)) {
+
+        // create deep copy of pokemon array
+        const pokemonCopy = this.copy(this.state.pokemon)
+
+        let evolutionChain = backpackCopy[contentIndex].pokemon_species.evolution_chain
+        // changes the evolutionChain based on which pokemon is gaining experience
+        // digs deeper in evolution_chain until finding the evolution data for the chosen pokemon
+        while (content.pokemon_species.name !== evolutionChain.species.name) {
+          evolutionChain = evolutionChain.evolves_to[0]
+        }
+
+        // if the item's effect description contains the current pokemon's name
         if (backpackCopy[index].effect.includes(content.pokemon_species.name)) {
 
-          let evolutionChain = backpackCopy[contentIndex].pokemon_species.evolution_chain
-          // changes the evolutionChain based on which pokemon is gaining experience
-          // digs deeper in evolution_chain until finding the evolution data for the chosen pokemon
-          while(content.pokemon_species.name !== evolutionChain.species.name) {
-            evolutionChain = evolutionChain.evolves_to[0]
-          }
-
-          // create deep copy of pokemon array
           // invoke evolvePokemonByItem to update the current pokemon to the
           // appropriate pokemon in the evolution chain
-          const pokemonCopy = this.copy(this.state.pokemon)
           this.evolvePokemonByItem(index, contentIndex, content.entry_number, backpackCopy, content)
           this.evolvePokemonByItem(index, contentIndex, content.entry_number + 1, backpackCopy, content)
           this.evolvePokemonByItem(index, contentIndex, content.entry_number + 2, backpackCopy, content)
+        }
+        // evolve if there is a `rare-candy`
+        else if (backpackCopy[index].name === 'rare-candy') {
+
+          // prevents pokemon not possessing an evolves_to array from evolving
+          // occurs if chosen pokemon is the highest evolved form for its evolution chain
+          if (evolutionChain.evolves_to.length !== 0) {
+
+            // if current pokemon's name is equal to it's evolution chain's name
+            // set evolved pokemon's experience and level to the current pokemon's values
+            // build the rest of the evolved pokemon obj and replace the current pokemon obj
+            // with the evolved pokemon obj
+            if (pokemonCopy[content.entry_number - 1].pokemon_species.name === evolutionChain.species.name) {
+              pokemonCopy[content.entry_number].pokemon_species.experience = content.pokemon_species.experience
+              pokemonCopy[content.entry_number].pokemon_species.level = content.pokemon_species.level
+              backpackCopy.splice(contentIndex, 1, this.buildPokemon(content.entry_number, pokemonCopy))
+            }
+          }
         }
       }
     })
