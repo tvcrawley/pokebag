@@ -1,8 +1,8 @@
 # Pokébag
 
-## This application allows the user to store and modify pokémon and items in a backpack
+## This application allows the user to store and modify pokémon and items in a backpack.
 
-A pokemon consists of the following attributes:
+A pokémon consists of the following attributes:
 * entry_number
 * pokemon_species
   - description
@@ -21,7 +21,7 @@ An item consists of the following attributes:
 * url
 
 A backpack consists of the following attributes:
-* any pokemon added
+* any pokémon added
 * any items added
 
 #### Context
@@ -57,21 +57,21 @@ Extra Credit:
 ```
 
 ### List of steps to complete
-1. Create a bag (one per “user”)
-2. Add pokemon or items to bag
-3. Remove pokemon or items from bag
-4. Display detailed info about a pokemon or item when selected
-5. Incorporate PokeAPI (pokemon and items)
-6. Upgrade (evolve) pokemon when pokemon is at correct level OR correct item is used
-7. Old pokemon should be removed from bag once evolved (new pokemon should take its place)
-8. When adding pokemon to backpack, make a GET request for custom property values and build individual pokemon objects with those values
+1. Create a bag (one per 'user').
+2. Add pokémon or items to bag.
+3. Remove pokémon or items from bag.
+4. Display detailed info about a pokémon or item when selected.
+5. Incorporate PokeAPI (pokémon and items).
+6. Upgrade (evolve) pokémon when pokémon is at correct level OR correct item is used.
+7. Old pokémon should be removed from bag once evolved (new pokémon should take its place).
+8. When adding pokémon to backpack, make a GET request for custom. property values and build individual pokémon objects with those values.
 
 _Notes_:
-- Rare candy is allowed for evolution
-- Red, Blue, and Yellow pokemon **only**
-- No displays of: Game Version, Location, Encounters, Contests, or any internal data attributes (e.g. ‘order’, ‘id’)
-- App is session based (no users/auth)
-- Port should be localhost:8080
+- Rare candy is allowed for evolution.
+- Red, Blue, and Yellow pokémon **only**.
+- No displays of: Game Version, Location, Encounters, Contests, or any internal data attributes (e.g. 'order', 'id').
+- App is session based (no users/auth).
+- Port should be `localhost:8080`.
 
 #### Technologies used
 
@@ -82,17 +82,24 @@ _Notes_:
 
 #### Installation instructions
 ##### Viewing the App
-1. Unzip the project files
-2. Install dependencies with `npm install`
-3. Run `npm start` in the terminal
-4. Navigate to `http://localhost:8080/`
+Navigate to [https://tvlangley.github.io/pokebag/](https://tvlangley.github.io/parkFinder/).
+
+OR
+1. Unzip the project files.
+2. Install dependencies with `npm install`.
+3. Run `npm start` in the terminal.
+4. Navigate to [http://localhost:8080/](http://localhost:8080/).
 
 ##### Viewing the Code
-1. Unzip the project files
-2. Install dependencies with `npm install`
-3. Open project with favorite text editor
+View repo on GitHub at [https://github.com/tvlangley/pokebag](https://github.com/tvlangley/pokebag).
+
+OR
+1. Unzip the project files.
+2. Install dependencies with `npm install`.
+3. Open project with favorite text editor.
 
 #### Improvements
-- Items used to evolve pokemon currently evolve all pokemon associated with the item
-- Both pokemon and items are added to the backpack array before the corresponding data from the pokeapi has been appended
-- Move repeating code into helper functions
+- Both pokémon and items are added to the backpack array before the corresponding data from the pokeapi has been appended.
+  - Before using an item to evolve, user has to wait for GET requests to pokeapi to finish.
+- Items used to evolve pokémon currently evolve all pokémon associated with the item.
+- Move repeating code into helper functions.
