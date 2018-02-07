@@ -35,7 +35,7 @@ function Backpack (props) {
             return <div>
               <p className='hightlight'>Warning: Evolution items are powerful! Make sure you don't accidentally evolve a Pokemon with the same evolution trigger.</p>
               <img src={data.image} alt={data.name}/>
-              <p onClick={() => props.onUseItemClick(index)}>Use</p>
+              <p className='enhancement' onClick={() => props.onUseItemClick(index)}>Use</p>
               <p>
                 Effect: {data.effect}
               </p>

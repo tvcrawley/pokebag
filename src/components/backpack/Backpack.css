@@ -41,15 +41,24 @@
   border: none;
 }
 
-.Backpack span {
+.Backpack span,
+.enhancement {
   border: #f00 solid 2.5px;
   padding: 3%;
+}
+
+.enhancement {
+  border-radius: 10%;
+  margin: 5% 15%;
 }
 
 .Backpack p > span {
   margin: 3%;
 }
 
-.Backpack span:hover {
+.Backpack span:hover,
+.enhancement:hover {
+  background-color: red;
+  border: white solid 2.5px;
   cursor: pointer;
 }
