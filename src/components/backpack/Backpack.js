@@ -35,6 +35,7 @@ function Backpack (props) {
             return <div>
               <p className='hightlight'>Warning: Evolution items are powerful! Make sure you don't accidentally evolve a Pokemon with the same evolution trigger.</p>
               <img src={data.image} alt={data.name}/>
+              <p className='enhancement' onClick={() => props.onUseItemClick(index)}>Use</p>
               <p>
                 Effect: {data.effect}
               </p>
@@ -55,8 +56,7 @@ function Backpack (props) {
 
   // loop through backpack array
   // if the content is a pokemon, render pokemon data and functionality
-  // if the content is an evolution item, render evolution item data and functionality
-  // if the content is not an evolution item, render item data and functionality
+  // otherwise the content is an item so render item data and functionality
   const backpackList = props.backpack.map((data, index) => {
     if (data.pokemon_species !== undefined) {
       return (
@@ -66,23 +66,14 @@ function Backpack (props) {
           {details(data, index)}
         </li>
       )
-    } else if ((data.effect !== undefined) && (data.name.includes('-stone') || data.name === 'rare-candy')) {
-        return (
-          <li key={index}>
-            <span onClick={() => props.onBackpackDetailClick(index)}>{data.name}</span>
-            <span onClick={() => props.onUseItemClick(index)}>Use</span>
-            <span onClick={() => props.onDeleteFromBackpack(index)}>X</span>
-            {details(data, index)}
-          </li>
-        )
     } else {
-        return (
-          <li key={index}>
-            <span onClick={() => props.onBackpackDetailClick(index)}>{data.name}</span>
-            <span onClick={() => props.onDeleteFromBackpack(index)}>X</span>
-            {details(data, index)}
-          </li>
-        )
+      return (
+        <li key={index}>
+          <span onClick={() => props.onBackpackDetailClick(index)}>{data.name}</span>
+          <span onClick={() => props.onDeleteFromBackpack(index)}>X</span>
+          {details(data, index)}
+        </li>
+      )
     }
   })
   return (
