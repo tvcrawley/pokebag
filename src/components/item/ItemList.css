@@ -1,19 +1,26 @@
 .ItemList {
-  padding-bottom: 2%;
+  border-left: 4px solid #fff;
+  order: 2;
+  padding: 2% 5%;
+  width: 30%;
 }
 
 .ItemList h2 {
   border-bottom: 2px solid #fff;
   border-top: 2px solid #fff;
-  margin: 1% 30%;
-  padding: 1% 0;
+  padding: 3%;
+}
+
+.ItemList ul {
+  margin: 0;
+  padding: 0;
 }
 
 .ItemList li {
   font-size: 150%;
   font-weight: bold;
   list-style: none;
-  padding: 2%;
+  padding: 4% 0;
 }
 
 .ItemList span {

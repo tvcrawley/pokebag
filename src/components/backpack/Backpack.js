@@ -33,7 +33,7 @@ function Backpack (props) {
               return <div className='hightlight'>Loading (Please try again)</div>
             }
             return <div>
-              <p>Warning: Evolution items are powerful! Make sure you don't accidentally evolve a Pokemon with the same evolution trigger.</p>
+              <p className='hightlight'>Warning: Evolution items are powerful! Make sure you don't accidentally evolve a Pokemon with the same evolution trigger.</p>
               <img src={data.image} alt={data.name}/>
               <p>
                 Effect: {data.effect}
